@@ -2,7 +2,7 @@ version : "3"
 
 services:
   nextjs:
-    container_name: "AppLangtitude"
+    container_name: "AppHistoryLegens"
     image: react
     restart: always
     environment:
