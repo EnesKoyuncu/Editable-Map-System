@@ -1,101 +1,292 @@
-import React from "react";
-import {
-  AppstoreOutlined,
-  MailOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
-import type { MenuProps } from "antd";
-import { Menu } from "antd";
-import Tabs from "./Tabs";
+import React, { useEffect, useState } from "react";
+import "../style/sideMenu.css";
+import IconComponent from "./IconComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
+import { MainContext } from "../context";
 
-type MenuItem = Required<MenuProps>["items"][number];
+export const SideMenu = () => {
+  // * SideMenu açma kapama
+  const [sideMenuDisplay, setSideMenuDisplay] = useState(true);
+  function toggleSideMenu() {
+    var sideMenu = document.getElementById("sideMenu");
+    var hidedBack = document.getElementById("hidedBack");
+    if (sideMenuDisplay) {
+      setSideMenuDisplay(false);
+      if (sideMenu != null) {
+        sideMenu.style.display = "none";
+        if (hidedBack != null) {
+          hidedBack.style.display = "block";
+        } else {
+          console.log("hidedBack is null - hidedBack Bulunamadi");
+        }
+      } else {
+        console.log("sideMenu is null - Side Menu Bulunamadi");
+      }
+    } else {
+      setSideMenuDisplay(true);
+      if (sideMenu != null) {
+        sideMenu.style.display = "flex";
+        if (hidedBack != null) {
+          hidedBack.style.display = "none";
+        } else {
+          console.log("hidedBack is null - hidedBack Bulunamadi");
+        }
+      } else {
+        console.log("sideMenu is null - Side Menu Bulunamadi");
+      }
+    }
+  }
+  // * Icon Section açma kapama
+  const [iconSectionDisplay, setIconSectionDisplay] = useState(false);
+  function hideIconSection() {
+    var subMenusSection = document.getElementById("subIconMenus");
 
-// function getSingleItem(
-//   label: React.ReactNode,
-//   key: React.Key,
-//   icon?: React.ReactNode,
-//   children?: MenuItem,
-//   type?: "group"
-// ): MenuItem {
-//   return {
-//     key,
-//     icon,
-//     children,
-//     label,
-//     type,
-//   } as MenuItem;
-// }
+    if (iconSectionDisplay === false) {
+      if (subMenusSection != null) {
+        subMenusSection.style.display = "flex";
+        setIconSectionDisplay(true);
+      }
+    } else {
+      if (subMenusSection != null) {
+        subMenusSection.style.display = "none";
+        setIconSectionDisplay(false);
+      }
+    }
+  }
 
-function getItem(
-  label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-  type?: "group",
-  style?: any
-): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-    style,
-  } as MenuItem;
-}
+  // * Icon seçme
+  const [selectedIcon, setSelectedIcon] = useState<string>("random");
+  // const [selectedIcon, setSelectedIcon] = useState<string| null>(null);
 
-const items: MenuProps["items"] = [
-  getItem("Icons", "sub1", <MailOutlined />, [getItem(<Tabs />, "1")]),
+  function selectIcon(iconName: string) {
+    setSelectedIcon(iconName); // Seçilen iconu state'e kaydet
+  }
 
-  getItem("Navigation Two", "sub2", <AppstoreOutlined />, [
-    getItem("Option 5", "5"),
-    getItem("Option 6", "6"),
-    getItem("Submenu", "sub3", null, [
-      getItem("Option 7", "7"),
-      getItem("Option 8", "8"),
-    ]),
-  ]),
+  // useEffect(() => {
+  //   data();
+  // }, [selectedIcon]);
 
-  { type: "divider" },
+  // const data = () => {
+  //   return selectedIcon;
+  // };
 
-  getItem("Navigation Three", "sub4", <SettingOutlined />, [
-    getItem("Option 9", "9"),
-    getItem("Option 10", "10"),
-    getItem("Option 11", "11"),
-    getItem("Option 12", "12"),
-  ]),
-
-  getItem(
-    "Group",
-    "grp",
-    null,
-    [getItem("Option 13", "13"), getItem("Option 14", "14")],
-    "group"
-  ),
-];
-
-const SideMenu: React.FC = () => {
-  const onClick: MenuProps["onClick"] = (e) => {
-    console.log("click ", e);
-  };
-
+  console.log("sideMenu içi selectedIcon: ", selectedIcon);
   return (
-    <Menu
-      onClick={onClick}
-      style={{
-        width: 256,
-        zIndex: 500,
-        position: "fixed",
-        top: 0,
-        right: 0,
-        height: "100vh",
-      }}
-      defaultSelectedKeys={["1"]}
-      defaultOpenKeys={["sub1"]}
-      mode="inline"
-      items={items}
-    />
+    <MainContext.Provider value={selectedIcon}>
+      <button
+        name="hidedBtn"
+        className="hidedBack"
+        id="hidedBack"
+        onClick={toggleSideMenu}
+      >
+        Aç
+      </button>
+      <div className="container" id="sideMenu">
+        <div className="section buttonSection">
+          <button className="back" name="backBtn" onClick={toggleSideMenu}>
+            Kapa
+          </button>
+          <button>rand1</button>
+          <button>rand1</button>
+          <button>rand1</button>
+        </div>
+        <div className="section iconSection">
+          <div className="iconMainMenu cursorPointer" onClick={hideIconSection}>
+            Icons
+            <span className="iconFixer">
+              <FontAwesomeIcon icon={faAngleDown} />
+            </span>
+          </div>
+          <div className="subIconMenus" id="subIconMenus">
+            <div className="iconLand  subIconPool">
+              Land Force Icons
+              <div className="dropdown-content">
+                <div className="grid-container">
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("jetFighter")}
+                  >
+                    <IconComponent iconName="jetFighter" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("torpedo")}
+                  >
+                    <IconComponent iconName="torpedo" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("missile")}
+                  >
+                    <IconComponent iconName="missile" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("pistol")}
+                  >
+                    <IconComponent iconName="pistol" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("sniper")}
+                  >
+                    <IconComponent iconName="sniper" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("soldier")}
+                  >
+                    <IconComponent iconName="soldier" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("warningRed")}
+                  >
+                    <IconComponent iconName="warningRed" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("warningBlack")}
+                  >
+                    <IconComponent iconName="warningBlack" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("skullAndBones")}
+                  >
+                    <IconComponent iconName="skullAndBones" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="iconAir  subIconPool">
+              Air Force Icons
+              <div className="dropdown-content">
+                <div className="grid-container">
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("jetFighter")}
+                  >
+                    <IconComponent iconName="jetFighter" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("torpedo")}
+                  >
+                    <IconComponent iconName="torpedo" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("missile")}
+                  >
+                    <IconComponent iconName="missile" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("pistol")}
+                  >
+                    <IconComponent iconName="pistol" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("sniper")}
+                  >
+                    <IconComponent iconName="sniper" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("soldier")}
+                  >
+                    <IconComponent iconName="soldier" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("warningRed")}
+                  >
+                    <IconComponent iconName="warningRed" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("warningBlack")}
+                  >
+                    <IconComponent iconName="warningBlack" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("skullAndBones")}
+                  >
+                    <IconComponent iconName="skullAndBones" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="iconNavy  subIconPool">
+              Navy Icons
+              <div className="dropdown-content">
+                <div className="grid-container">
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("jetFighter")}
+                  >
+                    <IconComponent iconName="jetFighter" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("torpedo")}
+                  >
+                    <IconComponent iconName="torpedo" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("missile")}
+                  >
+                    <IconComponent iconName="missile" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("pistol")}
+                  >
+                    <IconComponent iconName="pistol" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("sniper")}
+                  >
+                    <IconComponent iconName="sniper" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("soldier")}
+                  >
+                    <IconComponent iconName="soldier" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("warningRed")}
+                  >
+                    <IconComponent iconName="warningRed" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("warningBlack")}
+                  >
+                    <IconComponent iconName="warningBlack" />
+                  </div>
+                  <div
+                    className="grid-item"
+                    onClick={() => selectIcon("skullAndBones")}
+                  >
+                    <IconComponent iconName="skullAndBones" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="section drawSection">Draw</div>
+        <div className="section settingsSection">Map Settings</div>
+      </div>
+    </MainContext.Provider>
   );
 };
-
-export default SideMenu;
