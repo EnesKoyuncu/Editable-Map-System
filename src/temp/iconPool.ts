@@ -8,7 +8,7 @@ import warningRed from "../images/icons/warning-red.png";
 import warningBlack from "../images/icons/warning-black.png";
 import skullAndBones from "../images/icons/skull-and-bones.png";
 
-export interface Icon {
+export interface CustomIcon {
   name: string;
   path: any;
   category: iconCategory;
@@ -21,7 +21,7 @@ export enum iconCategory {
   Symbol,
 }
 
-const icons: Icon[] = [
+const icons: CustomIcon[] = [
   {
     name: "jetFighter",
     path: jetFighter,

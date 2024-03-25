@@ -14,15 +14,22 @@ import { SideMenu } from "../../components/SideMenu";
 
 import { MainContext } from "../../context";
 import { useContext } from "react";
+import { CustomIcon } from "../../temp/iconPool";
 
 interface FeedProps {}
 
 const Feed: React.FC<FeedProps> = () => {
+  const [currentIcon, setCurrentIcon] = useState<CustomIcon | undefined>({
+     name: 'location', path: locationPng, category: 1
+  });
   // * sabit yapı
-  const PopupContent = () => {
+  const getPopupContent = (icon?: CustomIcon) => {
     return (
       <Flex vertical gap={"middle"}>
-        <div>Here is your location.</div>
+        {
+          icon && <div>Category: {icon.category}, Name: {icon.name}</div>
+        }
+        
       </Flex>
     );
   };
@@ -34,43 +41,43 @@ const Feed: React.FC<FeedProps> = () => {
       icon={new Icon({ iconUrl: locationPng, iconSize: [40, 50] })}
     >
       <Popup>
-        <PopupContent />
+        {getPopupContent(currentIcon)}
       </Popup>
     </Marker>,
   ]);
 
   // * Marker ekleme yapısı
   const addMarker = (event: LeafletMouseEvent) => {
+    console.log(currentIcon);
+
     setMarkers([
       ...markers,
       <Marker
         position={[event.latlng.lat, event.latlng.lng]}
         draggable={true}
-        icon={new Icon({ iconUrl: currentIcon?.iconPath, iconSize: [40, 50] })}
+        icon={new Icon({ iconUrl: currentIcon?.path, iconSize: [40, 40] })}
       >
         <Popup>
-          <PopupContent />
+        {getPopupContent(currentIcon)}
         </Popup>
       </Marker>,
     ]);
   };
-  interface selectedIconI {
-    iconName: string;
-    iconPath?: string;
-    iconCategory?: string;
-  }
 
-  const [currentIcon, setCurrentIcon] = useState<selectedIconI>();
+
   const { selectedIcon, icons, deneme1 }: any = useContext(MainContext);
   console.log("Feed'te selectedIcon --> ", selectedIcon);
   console.log("Feed'te icons --> ", icons);
   console.log("Feed'te deneme1 --> ", deneme1);
+  useEffect(() => {
+    console.log(currentIcon);
+  }, [currentIcon])
 
   useEffect(() => {
     try {
       if (icons && icons.length > 0) {
-        const temp: selectedIconI | undefined = icons.find(
-          (icons: selectedIconI) => selectedIcon === icons.iconName
+        const temp: CustomIcon | undefined = icons.find(
+          (icons: CustomIcon) => selectedIcon === icons
         );
         setCurrentIcon(temp);
         console.log("currentIcon --> ", currentIcon);
@@ -82,7 +89,7 @@ const Feed: React.FC<FeedProps> = () => {
       console.log("Hata Tipi --> ", e);
     }
 
-    console.log(currentIcon?.iconPath, " --> currentIcon?.iconPath");
+    console.log(currentIcon?.path, " --> currentIcon?.iconPath");
   }, [selectedIcon, icons]);
 
   // * Mouse Event Atamaları
@@ -114,7 +121,7 @@ const Feed: React.FC<FeedProps> = () => {
           <ClickControl /> {/*Mouse Eventleri Default Eklendi*/}
           {markers} {/*Default Marker'ı Haritada Göstermek için eklendi*/}
         </LeafletMap>
-        <SideMenu />
+        <SideMenu setIcon={setCurrentIcon}/>
       </div>
     </MainContext.Provider>
   );

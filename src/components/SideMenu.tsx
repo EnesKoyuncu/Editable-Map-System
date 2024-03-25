@@ -5,7 +5,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faAngleDown } from "@fortawesome/free-solid-svg-icons";
 import { MainContext } from "../context";
 
-export const SideMenu = () => {
+interface SideMenuProps {
+  setIcon: any;
+}
+export const SideMenu: React.FC<SideMenuProps> = ({ setIcon }) => {
   // * SideMenu açma kapama
   const [sideMenuDisplay, setSideMenuDisplay] = useState(true);
   function toggleSideMenu() {
@@ -59,8 +62,8 @@ export const SideMenu = () => {
   const [selectedIcon, setSelectedIcon] = useState<string>("random");
   // const [selectedIcon, setSelectedIcon] = useState<string| null>(null);
 
-  function selectIcon(iconName: string) {
-    setSelectedIcon(iconName); // Seçilen iconu state'e kaydet
+  function selectIcon(icon: any) {
+    setIcon(icon);
   }
 
   // useEffect(() => {
@@ -103,184 +106,41 @@ export const SideMenu = () => {
               Land Force Icons
               <div className="dropdown-content">
                 <div className="grid-container">
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("jetFighter")}
-                  >
-                    <IconComponent iconName="jetFighter" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("torpedo")}
-                  >
-                    <IconComponent iconName="torpedo" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("missile")}
-                  >
-                    <IconComponent iconName="missile" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("pistol")}
-                  >
-                    <IconComponent iconName="pistol" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("sniper")}
-                  >
-                    <IconComponent iconName="sniper" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("soldier")}
-                  >
-                    <IconComponent iconName="soldier" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("warningRed")}
-                  >
-                    <IconComponent iconName="warningRed" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("warningBlack")}
-                  >
-                    <IconComponent iconName="warningBlack" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("skullAndBones")}
-                  >
-                    <IconComponent iconName="skullAndBones" />
-                  </div>
+                    <IconComponent iconName="jetFighter"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="torpedo"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="missile"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="pistol"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="sniper"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="soldier"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="warningRed"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="warningBlack"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="skullAndBones"  selectIcon={selectIcon}/>
                 </div>
               </div>
             </div>
             <div className="iconAir  subIconPool">
               Air Force Icons
-              <div className="dropdown-content">
-                <div className="grid-container">
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("jetFighter")}
-                  >
-                    <IconComponent iconName="jetFighter" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("torpedo")}
-                  >
-                    <IconComponent iconName="torpedo" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("missile")}
-                  >
-                    <IconComponent iconName="missile" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("pistol")}
-                  >
-                    <IconComponent iconName="pistol" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("sniper")}
-                  >
-                    <IconComponent iconName="sniper" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("soldier")}
-                  >
-                    <IconComponent iconName="soldier" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("warningRed")}
-                  >
-                    <IconComponent iconName="warningRed" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("warningBlack")}
-                  >
-                    <IconComponent iconName="warningBlack" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("skullAndBones")}
-                  >
-                    <IconComponent iconName="skullAndBones" />
-                  </div>
-                </div>
-              </div>
+                    <IconComponent iconName="jetFighter"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="torpedo"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="missile"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="pistol"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="sniper"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="soldier"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="warningRed"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="warningBlack"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="skullAndBones"  selectIcon={selectIcon}/>
             </div>
             <div className="iconNavy  subIconPool">
               Navy Icons
-              <div className="dropdown-content">
-                <div className="grid-container">
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("jetFighter")}
-                  >
-                    <IconComponent iconName="jetFighter" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("torpedo")}
-                  >
-                    <IconComponent iconName="torpedo" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("missile")}
-                  >
-                    <IconComponent iconName="missile" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("pistol")}
-                  >
-                    <IconComponent iconName="pistol" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("sniper")}
-                  >
-                    <IconComponent iconName="sniper" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("soldier")}
-                  >
-                    <IconComponent iconName="soldier" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("warningRed")}
-                  >
-                    <IconComponent iconName="warningRed" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("warningBlack")}
-                  >
-                    <IconComponent iconName="warningBlack" />
-                  </div>
-                  <div
-                    className="grid-item"
-                    onClick={() => selectIcon("skullAndBones")}
-                  >
-                    <IconComponent iconName="skullAndBones" />
-                  </div>
-                </div>
-              </div>
+                    <IconComponent iconName="jetFighter"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="torpedo"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="missile"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="pistol"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="sniper"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="soldier"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="warningRed"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="warningBlack"  selectIcon={selectIcon}/>
+                    <IconComponent iconName="skullAndBones"  selectIcon={selectIcon}/>
             </div>
           </div>
         </div>
