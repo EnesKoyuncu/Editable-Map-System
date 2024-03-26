@@ -7,7 +7,7 @@ import soldier from "../images/icons/soldier.png";
 import warningRed from "../images/icons/warning-red.png";
 import warningBlack from "../images/icons/warning-black.png";
 import skullAndBones from "../images/icons/skull-and-bones.png";
-
+import emptyIcon from "../images/icons/Empty.png";
 export interface CustomIcon {
   name: string;
   path: any;
@@ -65,6 +65,11 @@ const icons: CustomIcon[] = [
   {
     name: "skullAndBones",
     path: skullAndBones,
+    category: iconCategory.Symbol,
+  },
+  {
+    name: "empty",
+    path: emptyIcon,
     category: iconCategory.Symbol,
   },
 ];

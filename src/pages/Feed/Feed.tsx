@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import locationPng from "../../images/location.png";
+import emptyPng from "../../images/icons/Empty.png";
 import {
   MapContainer as LeafletMap,
   Marker,
@@ -7,19 +8,29 @@ import {
   TileLayer,
   useMapEvents,
 } from "react-leaflet";
-import { Icon, LeafletMouseEvent } from "leaflet";
-import "leaflet/dist/leaflet.css";
+import L, {
+  Icon,
+  LeafletMouseEvent,
+  LeafletEvent,
+  circle,
+  polyline,
+  rectangle,
+} from "leaflet";
 import { Flex } from "antd";
 import { SideMenu } from "../../components/SideMenu";
 
 import { CustomIcon } from "../../temp/iconPool";
+import { FeatureGroup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import "leaflet-draw/dist/leaflet.draw.css";
+import { EditControl } from "react-leaflet-draw";
 
 interface FeedProps {}
 
 const Feed: React.FC<FeedProps> = () => {
   const [currentIcon, setCurrentIcon] = useState<CustomIcon | undefined>({
     name: "location",
-    path: locationPng,
+    path: emptyPng,
     category: 1,
   });
   // * sabit yapı
@@ -69,6 +80,18 @@ const Feed: React.FC<FeedProps> = () => {
     return null;
   };
 
+  const _onCreate = (e: LeafletEvent) => {
+    console.log("data --> ", e);
+  };
+
+  const _onEdited = (e: LeafletEvent) => {
+    console.log(e);
+  };
+
+  const _onDeleted = (e: LeafletEvent) => {
+    console.log(e);
+  };
+
   return (
     <>
       <div>
@@ -88,8 +111,24 @@ const Feed: React.FC<FeedProps> = () => {
           />
           <ClickControl /> {/*Mouse Eventleri Default Eklendi*/}
           {markers} {/*Default Marker'ı Haritada Göstermek için eklendi*/}
+          <FeatureGroup>
+            <EditControl
+              position="bottomleft"
+              onCreated={_onCreate}
+              onEdited={_onEdited}
+              onDeleted={_onDeleted}
+              draw={{
+                rectangle: rectangle,
+                circle: circle,
+                polyline: polyline,
+                circlemarker: false,
+
+                marker: false,
+              }}
+            />
+          </FeatureGroup>
         </LeafletMap>
-        <SideMenu setIcon={setCurrentIcon} />
+        <SideMenu setIcon={setCurrentIcon} setMarkers={setMarkers} />
       </div>
     </>
   );

@@ -32,12 +32,14 @@ function getItem(
 
 interface SideMenuProps {
   setIcon: any;
+  setMarkers: any;
 }
 
-export const SideMenu: React.FC<SideMenuProps> = ({ setIcon }) => {
+export const SideMenu: React.FC<SideMenuProps> = ({ setIcon, setMarkers }) => {
   const [mode, setMode] = useState<"vertical" | "inline">("inline");
   const [theme, setTheme] = useState<MenuTheme>("light");
 
+  // const [markerRemoveState, setMarkerRemoveState] = useState<boolean>(false);
   const changeMode = (value: boolean) => {
     setMode(value ? "vertical" : "inline");
   };
@@ -47,6 +49,10 @@ export const SideMenu: React.FC<SideMenuProps> = ({ setIcon }) => {
   };
   function selectIcon(icon: any) {
     setIcon(icon);
+  }
+
+  function clearMarkers() {
+    setMarkers([]);
   }
 
   return (
@@ -75,6 +81,19 @@ export const SideMenu: React.FC<SideMenuProps> = ({ setIcon }) => {
           <Switch onChange={changeTheme} /> <div>Change Style</div>
         </div>
         <Menu.SubMenu title="Icons">
+          <Menu.SubMenu title="Symbol Icons">
+            <div className="grid-container">
+              <IconComponent iconName="empty" selectIcon={selectIcon} />
+              <IconComponent iconName="torpedo" selectIcon={selectIcon} />
+              <IconComponent iconName="missile" selectIcon={selectIcon} />
+              <IconComponent iconName="pistol" selectIcon={selectIcon} />
+              <IconComponent iconName="sniper" selectIcon={selectIcon} />
+              <IconComponent iconName="soldier" selectIcon={selectIcon} />
+              <IconComponent iconName="warningRed" selectIcon={selectIcon} />
+              <IconComponent iconName="warningBlack" selectIcon={selectIcon} />
+              <IconComponent iconName="skullAndBones" selectIcon={selectIcon} />
+            </div>
+          </Menu.SubMenu>
           <Menu.SubMenu title="Airforce Icons">
             <div className="grid-container">
               <IconComponent iconName="jetFighter" selectIcon={selectIcon} />
@@ -121,18 +140,20 @@ export const SideMenu: React.FC<SideMenuProps> = ({ setIcon }) => {
             </div>
           </Menu.SubMenu>
         </Menu.SubMenu>
-        <Menu.SubMenu title="Draw">
-          <Menu.Item>Draw Line</Menu.Item>
-          <Menu.Item>Draw Polygon</Menu.Item>
-          <Menu.Item>Draw Circle</Menu.Item>
+        <Menu.SubMenu title="Draw Options">
+          <Menu.Item>Import Draws</Menu.Item>
+          <Menu.Item>Export Current Draw</Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu title="Map Options">
-          <Menu.Item>Draw Line</Menu.Item>
-          <Menu.Item>Draw Polygon</Menu.Item>
-          <Menu.Item>Draw Circle</Menu.Item>
+          <Menu.Item>Maps</Menu.Item>
+          <Menu.Item>Radars</Menu.Item>
+          <Menu.Item>H</Menu.Item>
         </Menu.SubMenu>
-        {/* </Menu>
-      <Menu> */}
+
+        <Menu.Item style={{ position: "absolute", bottom: "50px", right: "0" }}>
+          <a onClick={clearMarkers}>Clear All Markers</a>
+        </Menu.Item>
+
         <Menu.Item style={{ position: "absolute", bottom: "0", right: "0" }}>
           <a
             href="https://www.linkedin.com/in/erdem-kepenek/"
