@@ -12,24 +12,25 @@ import "leaflet/dist/leaflet.css";
 import { Flex } from "antd";
 import { SideMenu } from "../../components/SideMenu";
 
-import { MainContext } from "../../context";
-import { useContext } from "react";
 import { CustomIcon } from "../../temp/iconPool";
 
 interface FeedProps {}
 
 const Feed: React.FC<FeedProps> = () => {
   const [currentIcon, setCurrentIcon] = useState<CustomIcon | undefined>({
-     name: 'location', path: locationPng, category: 1
+    name: "location",
+    path: locationPng,
+    category: 1,
   });
   // * sabit yapı
   const getPopupContent = (icon?: CustomIcon) => {
     return (
       <Flex vertical gap={"middle"}>
-        {
-          icon && <div>Category: {icon.category}, Name: {icon.name}</div>
-        }
-        
+        {icon && (
+          <div>
+            Category: {icon.category}, Name: {icon.name}
+          </div>
+        )}
       </Flex>
     );
   };
@@ -40,9 +41,7 @@ const Feed: React.FC<FeedProps> = () => {
       draggable={true}
       icon={new Icon({ iconUrl: locationPng, iconSize: [40, 50] })}
     >
-      <Popup>
-        {getPopupContent(currentIcon)}
-      </Popup>
+      <Popup>{getPopupContent(currentIcon)}</Popup>
     </Marker>,
   ]);
 
@@ -57,40 +56,10 @@ const Feed: React.FC<FeedProps> = () => {
         draggable={true}
         icon={new Icon({ iconUrl: currentIcon?.path, iconSize: [40, 40] })}
       >
-        <Popup>
-        {getPopupContent(currentIcon)}
-        </Popup>
+        <Popup>{getPopupContent(currentIcon)}</Popup>
       </Marker>,
     ]);
   };
-
-
-  const { selectedIcon, icons, deneme1 }: any = useContext(MainContext);
-  console.log("Feed'te selectedIcon --> ", selectedIcon);
-  console.log("Feed'te icons --> ", icons);
-  console.log("Feed'te deneme1 --> ", deneme1);
-  useEffect(() => {
-    console.log(currentIcon);
-  }, [currentIcon])
-
-  useEffect(() => {
-    try {
-      if (icons && icons.length > 0) {
-        const temp: CustomIcon | undefined = icons.find(
-          (icons: CustomIcon) => selectedIcon === icons
-        );
-        setCurrentIcon(temp);
-        console.log("currentIcon --> ", currentIcon);
-      } else {
-        console.log("icons dizisi tanımlı değil veya boş.");
-        // icons dizisi tanımlı değil veya boşsa, buna uygun bir işlem yapın
-      }
-    } catch (e) {
-      console.log("Hata Tipi --> ", e);
-    }
-
-    console.log(currentIcon?.path, " --> currentIcon?.iconPath");
-  }, [selectedIcon, icons]);
 
   // * Mouse Event Atamaları
   const ClickControl = () => {
@@ -100,9 +69,8 @@ const Feed: React.FC<FeedProps> = () => {
     return null;
   };
 
-  const data = {};
   return (
-    <MainContext.Provider value={data}>
+    <>
       <div>
         <LeafletMap
           center={[41.015137, 28.97953]}
@@ -121,9 +89,9 @@ const Feed: React.FC<FeedProps> = () => {
           <ClickControl /> {/*Mouse Eventleri Default Eklendi*/}
           {markers} {/*Default Marker'ı Haritada Göstermek için eklendi*/}
         </LeafletMap>
-        <SideMenu setIcon={setCurrentIcon}/>
+        <SideMenu setIcon={setCurrentIcon} />
       </div>
-    </MainContext.Provider>
+    </>
   );
 };
 

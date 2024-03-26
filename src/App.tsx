@@ -8,11 +8,10 @@ import {
 import Login from "./pages/Login/Login";
 import Dashboard from "./pages/Feed/Feed";
 import Layout from "./pages/Layout";
-import { MainContext } from "./context";
 
 const App: React.FC = () => {
   return (
-    <MainContext.Provider value={{}}>
+    <>
       <Router>
         <Routes>
           <Route
@@ -34,7 +33,7 @@ const App: React.FC = () => {
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </Router>
-    </MainContext.Provider>
+    </>
   );
 };
 
