@@ -9,33 +9,54 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import { Divider, Menu, Switch } from "antd";
-import type { MenuProps, MenuTheme } from "antd/es/menu";
+import type { MenuTheme } from "antd/es/menu";
 import IconComponent from "./IconComponent";
-
-type MenuItem = Required<MenuProps>["items"][number];
-
-function getItem(
-  label: React.ReactNode,
-  key?: React.Key | null,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-  type?: ""
-): MenuItem {
-  return {
-    key,
-    icon,
-    children,
-    label,
-    type,
-  } as MenuItem;
-}
 
 interface SideMenuProps {
   setIcon: any;
   setMarkers: any;
+  setCurrentTileLayerUrl: any;
+  setCurrentTileLayerAttr: any;
 }
 
-export const SideMenu: React.FC<SideMenuProps> = ({ setIcon, setMarkers }) => {
+export const SideMenu: React.FC<SideMenuProps> = ({
+  setIcon,
+  setMarkers,
+  setCurrentTileLayerUrl,
+  setCurrentTileLayerAttr,
+}) => {
+  const maps = [
+    {
+      name: "Default",
+      url: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      attribution:
+        '&copy; <a href="https://www.youtube.com/@historylegends">@History Legends</a>',
+    },
+    {
+      name: "GoogleMaps",
+      url: "http://{s}.google.com/vt?lyrs=m&x={x}&y={y}&z={z}",
+      attribution: null,
+    },
+    {
+      name: "StadiaLight",
+      url: "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}{r}.png",
+      attribution:
+        '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://www.stamen.com/" target="_blank">Stamen Design</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+    {
+      name: "StadiaDark",
+      url: "https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png",
+      attribution:
+        '&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    },
+    {
+      name: "CadastreSatellite",
+      url: "https://api.maptiler.com/maps/cadastre-satellite/256/{z}/{x}/{y}.png?key=UGpYs28p7lHHzFYxJeRn",
+      attribution:
+        "https://api.maptiler.com/maps/cadastre-satellite/256/tiles.json?key=UGpYs28p7lHHzFYxJeRn",
+    },
+  ];
+
   const [mode, setMode] = useState<"vertical" | "inline">("inline");
   const [theme, setTheme] = useState<MenuTheme>("light");
 
@@ -53,6 +74,12 @@ export const SideMenu: React.FC<SideMenuProps> = ({ setIcon, setMarkers }) => {
 
   function clearMarkers() {
     setMarkers([]);
+  }
+
+  function changeMap(name: string) {
+    let map = maps.find((m) => m.name === name);
+    setCurrentTileLayerUrl(map?.url);
+    setCurrentTileLayerAttr(map?.attribution);
   }
 
   return (
@@ -145,7 +172,22 @@ export const SideMenu: React.FC<SideMenuProps> = ({ setIcon, setMarkers }) => {
           <Menu.Item>Export Current Draw</Menu.Item>
         </Menu.SubMenu>
         <Menu.SubMenu title="Map Options">
-          <Menu.Item>Maps</Menu.Item>
+          <Menu.SubMenu title="Maps">
+            <Menu.Item>
+              <a onClick={() => changeMap("Default")}>Default</a>
+            </Menu.Item>
+            <Menu.Item>
+              <a onClick={() => changeMap("CadastreSatellite")}>
+                Cadastre Satellite
+              </a>
+            </Menu.Item>
+            <Menu.Item>
+              <a onClick={() => changeMap("StadiaLight")}>Stadia Light</a>
+            </Menu.Item>
+            <Menu.Item>
+              <a onClick={() => changeMap("StadiaDark")}>Stadia Dark</a>
+            </Menu.Item>
+          </Menu.SubMenu>
           <Menu.Item>Radars</Menu.Item>
           <Menu.Item>H</Menu.Item>
         </Menu.SubMenu>

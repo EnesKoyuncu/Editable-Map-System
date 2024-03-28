@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import locationPng from "../../images/location.png";
 import emptyPng from "../../images/icons/Empty.png";
 import {
@@ -15,6 +15,7 @@ import L, {
   circle,
   polyline,
   rectangle,
+  TileLayerOptions,
 } from "leaflet";
 import { Flex } from "antd";
 import { SideMenu } from "../../components/SideMenu";
@@ -33,6 +34,9 @@ const Feed: React.FC<FeedProps> = () => {
     path: emptyPng,
     category: 1,
   });
+
+  // const [currentTileLayer, setCurrentTileLayer] =
+  //   useState<L.TileLayer | null>();
   // * sabit yapı
   const getPopupContent = (icon?: CustomIcon) => {
     return (
@@ -92,6 +96,30 @@ const Feed: React.FC<FeedProps> = () => {
     console.log(e);
   };
 
+  interface CustomTileLayerOptions extends TileLayerOptions {
+    ext?: string;
+  }
+
+  const defaultTilelayer = L.tileLayer(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.{ext}",
+    {
+      minZoom: 0,
+      maxZoom: 20,
+      attribution:
+        '&copy; <a href="https://www.youtube.com/@historylegends">@History Legends</a>',
+      ext: "png",
+    } as CustomTileLayerOptions
+  );
+
+  const [currentTileLayerUrl, setCurrentTileLayerUrl] = useState<any>(
+    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  );
+  const [currentTileLayerAttr, setCurrentTileLayerAttr] = useState<any>(
+    '&copy; <a href="https://www.youtube.com/@historylegends">@History Legends</a>'
+  );
+
+  // console.log("Current Tilelayer --> ", currentTileLayer);
+
   return (
     <>
       <div>
@@ -106,8 +134,8 @@ const Feed: React.FC<FeedProps> = () => {
           style={{ width: "100vw", height: "100vh" }} // ! Burada % mi yoksa vh-vw mi kullanılacak?
         >
           <TileLayer
-            attribution='&copy; <a href="https://www.youtube.com/@historylegends">@History Legends</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution={currentTileLayerAttr}
+            url={currentTileLayerUrl}
           />
           <ClickControl /> {/*Mouse Eventleri Default Eklendi*/}
           {markers} {/*Default Marker'ı Haritada Göstermek için eklendi*/}
@@ -128,7 +156,12 @@ const Feed: React.FC<FeedProps> = () => {
             />
           </FeatureGroup>
         </LeafletMap>
-        <SideMenu setIcon={setCurrentIcon} setMarkers={setMarkers} />
+        <SideMenu
+          setIcon={setCurrentIcon}
+          setMarkers={setMarkers}
+          setCurrentTileLayerUrl={setCurrentTileLayerUrl}
+          setCurrentTileLayerAttr={setCurrentTileLayerAttr}
+        />
       </div>
     </>
   );
