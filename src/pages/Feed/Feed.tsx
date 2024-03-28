@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import locationPng from "../../images/location.png";
 import emptyPng from "../../images/icons/Empty.png";
 import {
@@ -8,19 +8,17 @@ import {
   TileLayer,
   useMapEvents,
 } from "react-leaflet";
-import L, {
+import {
   Icon,
   LeafletMouseEvent,
   LeafletEvent,
   circle,
   polyline,
   rectangle,
-  TileLayerOptions,
 } from "leaflet";
 import { Flex } from "antd";
 import { SideMenu } from "../../components/SideMenu";
-
-import { CustomIcon } from "../../temp/iconPool";
+import { CustomIcon } from "../../data/iconPool";
 import { FeatureGroup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
@@ -29,14 +27,10 @@ import { EditControl } from "react-leaflet-draw";
 interface FeedProps {}
 
 const Feed: React.FC<FeedProps> = () => {
-  const [currentIcon, setCurrentIcon] = useState<CustomIcon | undefined>({
-    name: "location",
-    path: emptyPng,
-    category: 1,
-  });
+  const [currentIcon, setCurrentIcon] = useState<CustomIcon | undefined>(
+    undefined
+  );
 
-  // const [currentTileLayer, setCurrentTileLayer] =
-  //   useState<L.TileLayer | null>();
   // * sabit yapı
   const getPopupContent = (icon?: CustomIcon) => {
     return (
@@ -62,8 +56,13 @@ const Feed: React.FC<FeedProps> = () => {
 
   // * Marker ekleme yapısı
   const addMarker = (event: LeafletMouseEvent) => {
-    console.log(currentIcon);
-
+    // TODO : Burada tıklanılan yerde halihazırda marker var silme işlemi yapcak
+    console.log(markers);
+    console.log(event.latlng.lat, event.latlng.lng);
+    if (currentIcon === undefined) {
+      console.log("Icon seçilmedi");
+      return;
+    }
     setMarkers([
       ...markers,
       <Marker
@@ -96,29 +95,12 @@ const Feed: React.FC<FeedProps> = () => {
     console.log(e);
   };
 
-  interface CustomTileLayerOptions extends TileLayerOptions {
-    ext?: string;
-  }
-
-  const defaultTilelayer = L.tileLayer(
-    "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.{ext}",
-    {
-      minZoom: 0,
-      maxZoom: 20,
-      attribution:
-        '&copy; <a href="https://www.youtube.com/@historylegends">@History Legends</a>',
-      ext: "png",
-    } as CustomTileLayerOptions
-  );
-
   const [currentTileLayerUrl, setCurrentTileLayerUrl] = useState<any>(
     "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
   );
   const [currentTileLayerAttr, setCurrentTileLayerAttr] = useState<any>(
     '&copy; <a href="https://www.youtube.com/@historylegends">@History Legends</a>'
   );
-
-  // console.log("Current Tilelayer --> ", currentTileLayer);
 
   return (
     <>
@@ -150,7 +132,6 @@ const Feed: React.FC<FeedProps> = () => {
                 circle: circle,
                 polyline: polyline,
                 circlemarker: false,
-
                 marker: false,
               }}
             />
@@ -161,6 +142,7 @@ const Feed: React.FC<FeedProps> = () => {
           setMarkers={setMarkers}
           setCurrentTileLayerUrl={setCurrentTileLayerUrl}
           setCurrentTileLayerAttr={setCurrentTileLayerAttr}
+          currentIconFromFeed={currentIcon}
         />
       </div>
     </>
