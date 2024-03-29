@@ -5,13 +5,14 @@ import { Divider, Menu, Switch } from "antd";
 import type { MenuTheme } from "antd/es/menu";
 import IconComponent from "./IconComponent";
 import maps from "../data/mapPool";
-
+import icons from "../data/iconPool";
+import { iconCategory } from "../data/iconPool";
 interface SideMenuProps {
   setIcon: any;
   setMarkers: any;
   setCurrentTileLayerUrl: any;
   setCurrentTileLayerAttr: any;
-  currentIconFromFeed: any;
+  currentIcon: any;
 }
 
 export const SideMenu: React.FC<SideMenuProps> = ({
@@ -19,11 +20,11 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   setMarkers,
   setCurrentTileLayerUrl,
   setCurrentTileLayerAttr,
-  currentIconFromFeed,
+  currentIcon,
 }) => {
   const [mode, setMode] = useState<"vertical" | "inline">("inline");
   const [theme, setTheme] = useState<MenuTheme>("light");
-  // const [currentIcon, setCurrentIcon] = useState<string | undefined>(undefined);
+
   const changeMode = (value: boolean) => {
     setMode(value ? "vertical" : "inline");
   };
@@ -32,10 +33,10 @@ export const SideMenu: React.FC<SideMenuProps> = ({
     setTheme(value ? "dark" : "light");
   };
   function selectIcon(icon: any) {
-    console.log("Current Icon From Feed: ", currentIconFromFeed);
+    console.log("Current Icon From Feed: ", currentIcon);
     console.log("Selected Icon: ", icon);
 
-    if (currentIconFromFeed === icon || icon.name === "empty") {
+    if (currentIcon === icon || icon.name === "empty") {
       setIcon(undefined);
     } else {
       setIcon(icon);
@@ -51,6 +52,10 @@ export const SideMenu: React.FC<SideMenuProps> = ({
     setCurrentTileLayerUrl(map?.url);
     setCurrentTileLayerAttr(map?.attribution);
   }
+
+  useEffect(() => {
+    console.log("Current Icon From Feed: ", currentIcon);
+  }, [currentIcon]);
 
   return (
     <div className="container" id="sideMenu">
@@ -79,60 +84,54 @@ export const SideMenu: React.FC<SideMenuProps> = ({
         <Menu.SubMenu title="Icons">
           <Menu.SubMenu title="Symbol Icons">
             <div className="grid-container">
-              <IconComponent iconName="empty" selectIcon={selectIcon} />
-              <IconComponent iconName="torpedo" selectIcon={selectIcon} />
-              <IconComponent iconName="missile" selectIcon={selectIcon} />
-              <IconComponent iconName="pistol" selectIcon={selectIcon} />
-              <IconComponent iconName="sniper" selectIcon={selectIcon} />
-              <IconComponent iconName="soldier" selectIcon={selectIcon} />
-              <IconComponent iconName="warningRed" selectIcon={selectIcon} />
-              <IconComponent iconName="warningBlack" selectIcon={selectIcon} />
-              <IconComponent iconName="skullAndBones" selectIcon={selectIcon} />
+              {icons
+                .filter((icon) => icon.category === iconCategory.Symbol)
+                .map((icon) => (
+                  <IconComponent
+                    icon={icon}
+                    selectIcon={selectIcon}
+                    highlight={currentIcon?.name === icon.name}
+                  />
+                ))}
             </div>
           </Menu.SubMenu>
           <Menu.SubMenu title="Airforce Icons">
             <div className="grid-container">
-              <IconComponent iconName="jetFighter" selectIcon={selectIcon} />
-              <IconComponent iconName="torpedo" selectIcon={selectIcon} />
-              <IconComponent iconName="missile" selectIcon={selectIcon} />
-              <IconComponent iconName="pistol" selectIcon={selectIcon} />
-              <IconComponent iconName="sniper" selectIcon={selectIcon} />
-              <IconComponent iconName="soldier" selectIcon={selectIcon} />
-              <IconComponent iconName="warningRed" selectIcon={selectIcon} />
-              <IconComponent iconName="warningBlack" selectIcon={selectIcon} />
-              <IconComponent iconName="skullAndBones" selectIcon={selectIcon} />
+              {icons
+                .filter((icon) => icon.category === iconCategory.Hava)
+                .map((icon) => (
+                  <IconComponent
+                    icon={icon}
+                    selectIcon={selectIcon}
+                    highlight={currentIcon?.name === icon.name}
+                  />
+                ))}
             </div>
           </Menu.SubMenu>
           <Menu.SubMenu title="Landforce Icons">
             <div className="grid-container">
-              <IconComponent iconName="jetFighter" selectIcon={selectIcon} />
-              <IconComponent iconName="torpedo" selectIcon={selectIcon} />
-              <IconComponent iconName="missile" selectIcon={selectIcon} />
-              <IconComponent iconName="pistol" selectIcon={selectIcon} />
-              <IconComponent iconName="sniper" selectIcon={selectIcon} />
-              <IconComponent iconName="soldier" selectIcon={selectIcon} />
-              <IconComponent iconName="warningRed" selectIcon={selectIcon} />
-              <IconComponent iconName="warningBlack" selectIcon={selectIcon} />
-              <IconComponent iconName="skullAndBones" selectIcon={selectIcon} />
-              <IconComponent iconName="warningRed" selectIcon={selectIcon} />
-              <IconComponent iconName="warningBlack" selectIcon={selectIcon} />
-              <IconComponent iconName="skullAndBones" selectIcon={selectIcon} />
-              <IconComponent iconName="warningRed" selectIcon={selectIcon} />
-              <IconComponent iconName="warningBlack" selectIcon={selectIcon} />
-              <IconComponent iconName="skullAndBones" selectIcon={selectIcon} />
+              {icons
+                .filter((icon) => icon.category === iconCategory.Kara)
+                .map((icon) => (
+                  <IconComponent
+                    icon={icon}
+                    selectIcon={selectIcon}
+                    highlight={currentIcon?.name === icon.name}
+                  />
+                ))}
             </div>
           </Menu.SubMenu>
           <Menu.SubMenu title="Navy Icons">
             <div className="grid-container">
-              <IconComponent iconName="jetFighter" selectIcon={selectIcon} />
-              <IconComponent iconName="torpedo" selectIcon={selectIcon} />
-              <IconComponent iconName="missile" selectIcon={selectIcon} />
-              <IconComponent iconName="pistol" selectIcon={selectIcon} />
-              <IconComponent iconName="sniper" selectIcon={selectIcon} />
-              <IconComponent iconName="soldier" selectIcon={selectIcon} />
-              <IconComponent iconName="warningRed" selectIcon={selectIcon} />
-              <IconComponent iconName="warningBlack" selectIcon={selectIcon} />
-              <IconComponent iconName="skullAndBones" selectIcon={selectIcon} />
+              {icons
+                .filter((icon) => icon.category === iconCategory.Deniz)
+                .map((icon) => (
+                  <IconComponent
+                    icon={icon}
+                    selectIcon={selectIcon}
+                    highlight={currentIcon?.name === icon.name}
+                  />
+                ))}
             </div>
           </Menu.SubMenu>
         </Menu.SubMenu>

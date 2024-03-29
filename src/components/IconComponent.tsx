@@ -1,24 +1,19 @@
-import React from "react";
-import icons from "../data/iconPool";
+import React, { useState } from "react";
 
 interface IconProps {
-  iconName: string;
+  icon: any;
   selectIcon: any;
-  iconPath?: string;
-  iconCategory?: string;
+  highlight?: boolean;
 }
 
-const IconComponent: React.FC<IconProps> = ({ iconName, selectIcon }) => {
-  const icon = icons.find((icon) => icon.name === iconName);
-
-  if (!icon) {
-    console.log("Icon not found");
-    return <div>Error</div>;
-  }
-
+const IconComponent: React.FC<IconProps> = ({
+  selectIcon,
+  highlight,
+  icon,
+}) => {
   return (
     <div
-      className="grid-item"
+      className={`grid-item ${highlight ? "active" : ""}`}
       onClick={() => {
         selectIcon(icon);
       }}

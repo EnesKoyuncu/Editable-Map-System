@@ -142,7 +142,7 @@ const Feed: React.FC<FeedProps> = () => {
           setMarkers={setMarkers}
           setCurrentTileLayerUrl={setCurrentTileLayerUrl}
           setCurrentTileLayerAttr={setCurrentTileLayerAttr}
-          currentIconFromFeed={currentIcon}
+          currentIcon={currentIcon}
         />
       </div>
     </>
