@@ -119,8 +119,8 @@ const Feed: React.FC<FeedProps> = () => {
             attribution={currentTileLayerAttr}
             url={currentTileLayerUrl}
           />
-          <ClickControl /> {/*Mouse Eventleri Default Eklendi*/}
-          {markers} {/*Default Marker'ı Haritada Göstermek için eklendi*/}
+          <ClickControl />
+          {markers}
           <FeatureGroup>
             <EditControl
               position="bottomleft"

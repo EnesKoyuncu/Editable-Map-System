@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
 import "../style/sideMenu.css";
-
 import { Divider, Menu, Switch } from "antd";
 import type { MenuTheme } from "antd/es/menu";
-import IconComponent from "./IconComponent";
 import maps from "../data/mapPool";
-import icons from "../data/iconPool";
 import { iconCategory } from "../data/iconPool";
+import { IconContainerComponent } from "./IconContainerComponent";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import sun from "../images/sun.png";
+import draw from "../images/draw.png";
+import map from "../images/map.png";
+import {
+  faSun,
+  faPencil,
+  faMap,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 interface SideMenuProps {
   setIcon: any;
   setMarkers: any;
@@ -24,18 +32,86 @@ export const SideMenu: React.FC<SideMenuProps> = ({
 }) => {
   const [mode, setMode] = useState<"vertical" | "inline">("inline");
   const [theme, setTheme] = useState<MenuTheme>("light");
+  const [sideMenuDesign, setSideMenuDesign] = useState<boolean>(false);
+  const [iconSubMenuTitle, setIconSubMenuTitle] = useState<any>("Icons");
+  const [drawSubMenuTitle, setDrawSubMenuTitle] = useState<any>("Draw Options");
+  const [mapsSubMenuTitle, setMapsSubMenuTitle] = useState<any>("Maps");
+  const [clearMarkerBtnState, setClearMarkerBtnState] =
+    useState<any>("Clear All Markers");
 
   const changeMode = (value: boolean) => {
     setMode(value ? "vertical" : "inline");
+    setSideMenuDesign(value ? true : false);
+    console.log("SideMenuDesign: ", sideMenuDesign);
+    console.log("Mode: ", mode);
   };
+
+  useEffect(() => {
+    if (sideMenuDesign) {
+      document.getElementById("sideMenu")?.classList.add("sideMenuDesign");
+
+      document.getElementById("options")?.classList.add("optionsDesign");
+
+      if (theme === "light") {
+        setIconSubMenuTitle(
+          <FontAwesomeIcon icon={faSun} className="fontAwesomeIcons" />
+        );
+        setDrawSubMenuTitle(
+          <FontAwesomeIcon icon={faPencil} className="fontAwesomeIcons" />
+        );
+        setMapsSubMenuTitle(
+          <FontAwesomeIcon icon={faMap} className="fontAwesomeIcons" />
+        );
+        setClearMarkerBtnState(
+          <FontAwesomeIcon
+            icon={faTrash}
+            style={{ width: "20px", height: "22px" }}
+          />
+        );
+      } else {
+        setIconSubMenuTitle(
+          <FontAwesomeIcon
+            icon={faSun}
+            color="light"
+            className="fontAwesomeIcons"
+          />
+        );
+        setDrawSubMenuTitle(
+          <FontAwesomeIcon
+            icon={faPencil}
+            color="light"
+            className="fontAwesomeIcons"
+          />
+        );
+        setMapsSubMenuTitle(
+          <FontAwesomeIcon
+            icon={faMap}
+            color="light"
+            className="fontAwesomeIcons"
+          />
+        );
+        setClearMarkerBtnState(
+          <FontAwesomeIcon
+            icon={faTrash}
+            style={{ width: "20px", height: "22px" }}
+            color="light"
+          />
+        );
+      }
+    } else {
+      document.getElementById("sideMenu")?.classList.remove("sideMenuDesign");
+      document.getElementById("options")?.classList.remove("optionsDesign");
+      setIconSubMenuTitle("Icons");
+      setDrawSubMenuTitle("Draw Options");
+      setMapsSubMenuTitle("Maps");
+      setClearMarkerBtnState("Clear All Markers");
+    }
+  }, [sideMenuDesign]);
 
   const changeTheme = (value: boolean) => {
     setTheme(value ? "dark" : "light");
   };
   function selectIcon(icon: any) {
-    console.log("Current Icon From Feed: ", currentIcon);
-    console.log("Selected Icon: ", icon);
-
     if (currentIcon === icon || icon.name === "empty") {
       setIcon(undefined);
     } else {
@@ -53,10 +129,6 @@ export const SideMenu: React.FC<SideMenuProps> = ({
     setCurrentTileLayerAttr(map?.attribution);
   }
 
-  useEffect(() => {
-    console.log("Current Icon From Feed: ", currentIcon);
-  }, [currentIcon]);
-
   return (
     <div className="container" id="sideMenu">
       <Menu
@@ -67,12 +139,10 @@ export const SideMenu: React.FC<SideMenuProps> = ({
           top: "0",
           flexDirection: "column",
         }}
-        defaultSelectedKeys={["1"]}
-        defaultOpenKeys={["sub1"]}
         mode={mode}
         theme={theme}
       >
-        <div className="options">
+        <div className="options" id="options">
           <Switch
             onChange={changeMode}
             style={{ width: "28px", height: "22px" }}
@@ -81,65 +151,44 @@ export const SideMenu: React.FC<SideMenuProps> = ({
           <Divider type="vertical" />
           <Switch onChange={changeTheme} /> <div>Change Style</div>
         </div>
-        <Menu.SubMenu title="Icons">
-          <Menu.SubMenu title="Symbol Icons">
-            <div className="grid-container">
-              {icons
-                .filter((icon) => icon.category === iconCategory.Symbol)
-                .map((icon) => (
-                  <IconComponent
-                    icon={icon}
-                    selectIcon={selectIcon}
-                    highlight={currentIcon?.name === icon.name}
-                  />
-                ))}
-            </div>
+        <Menu.SubMenu title={iconSubMenuTitle}>
+          <Menu.SubMenu title="Symbol">
+            <IconContainerComponent
+              categoryName={iconCategory.Symbol}
+              selectIcon={selectIcon}
+              currentIcon={currentIcon}
+            />
           </Menu.SubMenu>
-          <Menu.SubMenu title="Airforce Icons">
-            <div className="grid-container">
-              {icons
-                .filter((icon) => icon.category === iconCategory.Hava)
-                .map((icon) => (
-                  <IconComponent
-                    icon={icon}
-                    selectIcon={selectIcon}
-                    highlight={currentIcon?.name === icon.name}
-                  />
-                ))}
-            </div>
+
+          <Menu.SubMenu title="Hava">
+            <IconContainerComponent
+              categoryName={iconCategory.Hava}
+              selectIcon={selectIcon}
+              currentIcon={currentIcon}
+            />
           </Menu.SubMenu>
-          <Menu.SubMenu title="Landforce Icons">
-            <div className="grid-container">
-              {icons
-                .filter((icon) => icon.category === iconCategory.Kara)
-                .map((icon) => (
-                  <IconComponent
-                    icon={icon}
-                    selectIcon={selectIcon}
-                    highlight={currentIcon?.name === icon.name}
-                  />
-                ))}
-            </div>
+
+          <Menu.SubMenu title="Kara">
+            <IconContainerComponent
+              categoryName={iconCategory.Kara}
+              selectIcon={selectIcon}
+              currentIcon={currentIcon}
+            />
           </Menu.SubMenu>
-          <Menu.SubMenu title="Navy Icons">
-            <div className="grid-container">
-              {icons
-                .filter((icon) => icon.category === iconCategory.Deniz)
-                .map((icon) => (
-                  <IconComponent
-                    icon={icon}
-                    selectIcon={selectIcon}
-                    highlight={currentIcon?.name === icon.name}
-                  />
-                ))}
-            </div>
+
+          <Menu.SubMenu title="Deniz">
+            <IconContainerComponent
+              categoryName={iconCategory.Deniz}
+              selectIcon={selectIcon}
+              currentIcon={currentIcon}
+            />
           </Menu.SubMenu>
         </Menu.SubMenu>
-        <Menu.SubMenu title="Draw Options">
+        <Menu.SubMenu title={drawSubMenuTitle}>
           <Menu.Item>Import Draws</Menu.Item>
           <Menu.Item>Export Current Draw</Menu.Item>
         </Menu.SubMenu>
-        <Menu.SubMenu title="Map Options">
+        <Menu.SubMenu title={mapsSubMenuTitle}>
           <Menu.SubMenu title="Maps">
             <Menu.Item>
               <a onClick={() => changeMap("Default")}>Default</a>
@@ -160,8 +209,10 @@ export const SideMenu: React.FC<SideMenuProps> = ({
           <Menu.Item>H</Menu.Item>
         </Menu.SubMenu>
 
-        <Menu.Item style={{ position: "absolute", bottom: "0px", right: "0" }}>
-          <a onClick={clearMarkers}>Clear All Markers</a>
+        <Menu.Item className="clearMarkerBtn">
+          <div onClick={clearMarkers} id="clearMarkers">
+            {clearMarkerBtnState}
+          </div>
         </Menu.Item>
       </Menu>
     </div>

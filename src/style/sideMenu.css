@@ -10,11 +10,36 @@
   z-index: 1000;
   flex-direction: column;
   text-align: center;
-  /* row-gap: 25px; */
   font-size: 1.2rem;
   font-family: "Times New Roman", Times, serif;
-
   letter-spacing: 1px;
+  font-weight: 500;
+}
+
+.sideMenuDesign {
+  visibility: visible;
+  display: flex;
+  width: 80px;
+  height: 100%;
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 1000;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 0;
+}
+
+.sideMenuDesign > .ant-menu-submenu-arrow {
+  visibility: hidden !important;
+}
+
+.containerSmallMode {
+  width: 50px;
+  height: 100%;
+  transition: width 0.5s;
 }
 
 .section {
@@ -30,7 +55,7 @@
   min-height: 21px;
   padding: 8px;
   color: white;
-  max-height: 350px;
+  overflow: auto;
 }
 
 .iconLand {
@@ -152,9 +177,42 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-evenly;
-  height: auto;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px;
+  column-gap: 3px;
+  margin-bottom: 20px;
+  font-size: 0.7rem;
+  font-weight: 500;
+}
+
+.optionsDesign {
+  display: flex;
+  flex-direction: column !important;
+  align-items: center;
+  justify-content: space-evenly !important;
+  padding: 0 !important;
+  row-gap: 10px;
   margin-top: 15px;
-  margin-bottom: 10px;
-  font-size: 0.8rem;
+  margin-bottom: 20px;
+  font-size: 0.65rem;
+  font-weight: 500;
+}
+
+.fontAwesomeIcons {
+  width: 25px;
+  height: 25px;
+}
+
+.clearMarkerBtn {
+  position: absolute !important;
+  display: flex;
+  /* justify-content: center !important;
+  align-content: center !important; */
+  bottom: 0;
+
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }
