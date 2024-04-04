@@ -23,6 +23,7 @@ import { FeatureGroup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { EditControl } from "react-leaflet-draw";
+import { v4 as uuidv4 } from "uuid";
 
 interface FeedProps {}
 
@@ -31,46 +32,51 @@ const Feed: React.FC<FeedProps> = () => {
     undefined
   );
 
-  // * sabit yapı
-  const getPopupContent = (icon?: CustomIcon) => {
+  const [markers, setMarkers] = useState<JSX.Element[]>([]);
+
+  const getPopupContent = (markerId: number, icon?: CustomIcon) => {
+    const removeMarker = () => {
+      setMarkers((prev) =>
+        prev.filter((_, key) => _.key !== markerId.toString())
+      );
+    };
     return (
       <Flex vertical gap={"middle"}>
         {icon && (
           <div>
-            Category: {icon.category}, Name: {icon.name}
+            Category: {icon.category}, Name: {icon.name}{" "}
+            <button onClick={removeMarker}> Remove Icon </button>
           </div>
         )}
       </Flex>
     );
   };
-  // * sabit yapı
-  const [markers, setMarkers] = useState<JSX.Element[]>([
-    <Marker
-      position={[41.015137, 28.97953]}
-      draggable={true}
-      icon={new Icon({ iconUrl: locationPng, iconSize: [40, 50] })}
-    >
-      <Popup>{getPopupContent(currentIcon)}</Popup>
-    </Marker>,
-  ]);
+
+  const uniqueNumbers: number[] = [];
+  function generateUniqueNumber(min: number, max: number): number {
+    let randomNumber: number;
+    do {
+      randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+    } while (uniqueNumbers.includes(randomNumber));
+    uniqueNumbers.push(randomNumber);
+    return randomNumber;
+  }
 
   // * Marker ekleme yapısı
   const addMarker = (event: LeafletMouseEvent) => {
-    // TODO : Burada tıklanılan yerde halihazırda marker var silme işlemi yapcak
-    console.log(markers);
-    console.log(event.latlng.lat, event.latlng.lng);
     if (currentIcon === undefined) {
-      console.log("Icon seçilmedi");
       return;
     }
+    const markerId = generateUniqueNumber(1, 10000);
     setMarkers([
       ...markers,
       <Marker
         position={[event.latlng.lat, event.latlng.lng]}
         draggable={true}
+        key={markerId}
         icon={new Icon({ iconUrl: currentIcon?.path, iconSize: [40, 40] })}
       >
-        <Popup>{getPopupContent(currentIcon)}</Popup>
+        <Popup>{getPopupContent(markerId, currentIcon)}</Popup>
       </Marker>,
     ]);
   };

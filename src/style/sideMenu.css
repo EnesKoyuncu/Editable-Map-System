@@ -17,19 +17,15 @@
 }
 
 .sideMenuDesign {
-  visibility: visible;
-  display: flex;
-  width: 80px;
-  height: 100%;
-  background-color: #fff;
-  position: fixed;
-  top: 0;
-  right: 0;
-  z-index: 1000;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 0;
+  width: 80px !important;
+  justify-content: center !important;
+  align-items: center !important;
+  text-align: center;
+  font-size: 0 !important;
+}
+
+.ant-menu-submenu-title {
+  padding: unset !important;
 }
 
 .sideMenuDesign > .ant-menu-submenu-arrow {
@@ -187,16 +183,12 @@
 }
 
 .optionsDesign {
-  display: flex;
   flex-direction: column !important;
-  align-items: center;
   justify-content: space-evenly !important;
   padding: 0 !important;
   row-gap: 10px;
-  margin-top: 15px;
-  margin-bottom: 20px;
-  font-size: 0.65rem;
-  font-weight: 500;
+  margin-top: 15px !important;
+  font-size: 0.65rem !important;
 }
 
 .fontAwesomeIcons {
@@ -207,10 +199,8 @@
 .clearMarkerBtn {
   position: absolute !important;
   display: flex;
-  /* justify-content: center !important;
-  align-content: center !important; */
   bottom: 0;
-
+  margin-bottom: 0;
   border: 1px solid rgba(0, 0, 0, 0.2);
   box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
     rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,

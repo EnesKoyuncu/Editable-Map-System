@@ -6,15 +6,14 @@ import maps from "../data/mapPool";
 import { iconCategory } from "../data/iconPool";
 import { IconContainerComponent } from "./IconContainerComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import sun from "../images/sun.png";
-import draw from "../images/draw.png";
-import map from "../images/map.png";
+import clsx from "clsx";
 import {
   faSun,
   faPencil,
   faMap,
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+
 interface SideMenuProps {
   setIcon: any;
   setMarkers: any;
@@ -48,10 +47,6 @@ export const SideMenu: React.FC<SideMenuProps> = ({
 
   useEffect(() => {
     if (sideMenuDesign) {
-      document.getElementById("sideMenu")?.classList.add("sideMenuDesign");
-
-      document.getElementById("options")?.classList.add("optionsDesign");
-
       if (theme === "light") {
         setIconSubMenuTitle(
           <FontAwesomeIcon icon={faSun} className="fontAwesomeIcons" />
@@ -65,7 +60,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({
         setClearMarkerBtnState(
           <FontAwesomeIcon
             icon={faTrash}
-            style={{ width: "20px", height: "22px" }}
+            style={{ width: "20px", height: "22px", marginBottom: "-4px" }}
           />
         );
       } else {
@@ -93,14 +88,12 @@ export const SideMenu: React.FC<SideMenuProps> = ({
         setClearMarkerBtnState(
           <FontAwesomeIcon
             icon={faTrash}
-            style={{ width: "20px", height: "22px" }}
+            style={{ width: "20px", height: "22px", marginBottom: "-4px" }}
             color="light"
           />
         );
       }
     } else {
-      document.getElementById("sideMenu")?.classList.remove("sideMenuDesign");
-      document.getElementById("options")?.classList.remove("optionsDesign");
       setIconSubMenuTitle("Icons");
       setDrawSubMenuTitle("Draw Options");
       setMapsSubMenuTitle("Maps");
@@ -130,7 +123,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   }
 
   return (
-    <div className="container" id="sideMenu">
+    <div className={clsx("container", mode == "vertical" && "sideMenuDesign")}>
       <Menu
         style={{
           width: "100%",
@@ -141,15 +134,16 @@ export const SideMenu: React.FC<SideMenuProps> = ({
         }}
         mode={mode}
         theme={theme}
+        expandIcon={mode == "vertical" ? <></> : undefined}
       >
-        <div className="options" id="options">
+        <div className={clsx("options", mode == "vertical" && "optionsDesign")}>
           <Switch
             onChange={changeMode}
             style={{ width: "28px", height: "22px" }}
           />{" "}
-          <div>Change Mode</div>
+          <div>Mode</div>
           <Divider type="vertical" />
-          <Switch onChange={changeTheme} /> <div>Change Style</div>
+          <Switch onChange={changeTheme} /> <div>Style</div>
         </div>
         <Menu.SubMenu title={iconSubMenuTitle}>
           <Menu.SubMenu title="Symbol">
@@ -208,7 +202,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({
           <Menu.Item>Radars</Menu.Item>
           <Menu.Item>H</Menu.Item>
         </Menu.SubMenu>
-
+        <Menu.Item className="clearSingleMarker">Clear Single Marker</Menu.Item>
         <Menu.Item className="clearMarkerBtn">
           <div onClick={clearMarkers} id="clearMarkers">
             {clearMarkerBtnState}

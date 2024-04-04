@@ -1,5 +1,4 @@
 import icons from "../data/iconPool";
-import { Menu } from "antd";
 import IconComponent from "./IconComponent";
 
 export interface IconContaienr {
