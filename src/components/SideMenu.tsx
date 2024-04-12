@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../style/sideMenu.css";
-import { Divider, Menu, Switch } from "antd";
+import { Menu, Switch } from "antd";
 import type { MenuTheme } from "antd/es/menu";
 import maps from "../data/mapPool";
 import { iconCategory } from "../data/iconPool";
@@ -14,12 +14,17 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { Avatar, Space } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+
 interface SideMenuProps {
   setIcon: any;
   setMarkers: any;
   setCurrentTileLayerUrl: any;
   setCurrentTileLayerAttr: any;
   currentIcon: any;
+  setClearSingleMarker: any;
+  // screenWidth: number;
 }
 
 export const SideMenu: React.FC<SideMenuProps> = ({
@@ -28,6 +33,8 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   setCurrentTileLayerUrl,
   setCurrentTileLayerAttr,
   currentIcon,
+  setClearSingleMarker,
+  // screenWidth,
 }) => {
   const [mode, setMode] = useState<"vertical" | "inline">("inline");
   const [theme, setTheme] = useState<MenuTheme>("light");
@@ -38,13 +45,42 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   const [clearMarkerBtnState, setClearMarkerBtnState] =
     useState<any>("Clear All Markers");
 
+  const [clearSingleMarkerMode, setClearSingleMarkerMode] =
+    useState<boolean>(false);
+
+  // const [isChecked, setIsChecked] = useState<boolean>(false);
+  // const [screenAutoChange, setScreenAutoChange] = useState<boolean>(false);
+  // * SideMenu Mode Değişikliği
   const changeMode = (value: boolean) => {
     setMode(value ? "vertical" : "inline");
     setSideMenuDesign(value ? true : false);
-    console.log("SideMenuDesign: ", sideMenuDesign);
-    console.log("Mode: ", mode);
   };
 
+  // useEffect(() => {
+  //   if (screenWidth <= 1025) {
+  //     setScreenAutoChange(true);
+  //   } else {
+  //     setScreenAutoChange(false);
+  //   }
+  // }, [screenWidth]);
+
+  // useEffect(() => {
+  //   if (isChecked === false) {
+  //     if (screenAutoChange) {
+  //       console.log("küçük ekran");
+  //       setMode("vertical");
+  //       setSideMenuDesign(true);
+  //       setIsChecked(true);
+  //     } else {
+  //       console.log("büyük ekran");
+  //       setMode("inline");
+  //       setSideMenuDesign(false);
+  //       setIsChecked(false);
+  //     }
+  //   }
+  // }, [screenAutoChange]);
+
+  // * SideMenu Mode Değişikliği
   useEffect(() => {
     if (sideMenuDesign) {
       if (theme === "light") {
@@ -101,21 +137,36 @@ export const SideMenu: React.FC<SideMenuProps> = ({
     }
   }, [sideMenuDesign]);
 
+  // * Tema Değiştirme
   const changeTheme = (value: boolean) => {
     setTheme(value ? "dark" : "light");
   };
+
+  // * İkon Seçme
   function selectIcon(icon: any) {
-    if (currentIcon === icon || icon.name === "empty") {
-      setIcon(undefined);
+    if (clearSingleMarkerMode) {
+      alert("Please turn off clear single marker mode to add new markers.");
     } else {
-      setIcon(icon);
+      if (currentIcon === icon || icon.name === "empty") {
+        setIcon(undefined);
+      } else {
+        setIcon(icon);
+      }
     }
   }
 
+  // * Tek Markerı Temizleme
+  const clearSingleMarkersMode = () => {
+    setClearSingleMarkerMode(!clearSingleMarkerMode);
+    setClearSingleMarker(!clearSingleMarkerMode);
+  };
+
+  // * Markersı Temizleme
   function clearMarkers() {
     setMarkers([]);
   }
 
+  // * Map Değiştirme
   function changeMap(name: string) {
     let map = maps.find((m) => m.name === name);
     setCurrentTileLayerUrl(map?.url);
@@ -137,14 +188,15 @@ export const SideMenu: React.FC<SideMenuProps> = ({
         expandIcon={mode == "vertical" ? <></> : undefined}
       >
         <div className={clsx("options", mode == "vertical" && "optionsDesign")}>
-          <Switch
+          {/* <Switch
             onChange={changeMode}
             style={{ width: "28px", height: "22px" }}
           />{" "}
-          <div>Mode</div>
-          <Divider type="vertical" />
+          <div>Mode</div> */}
           <Switch onChange={changeTheme} /> <div>Style</div>
+          <Switch onChange={clearSingleMarkersMode} /> <div>Clear</div>
         </div>
+
         <Menu.SubMenu title={iconSubMenuTitle}>
           <Menu.SubMenu title="Symbol">
             <IconContainerComponent
@@ -168,6 +220,23 @@ export const SideMenu: React.FC<SideMenuProps> = ({
               selectIcon={selectIcon}
               currentIcon={currentIcon}
             />
+          </Menu.SubMenu>
+
+          <Menu.SubMenu title="Kara Aracı">
+            <Space direction="vertical" size={14}>
+              <Space wrap size={30} className="grid-container">
+                <Avatar shape="square" size="large" icon={<UserOutlined />} />
+                <Avatar shape="square" size="large" icon={<UserOutlined />} />
+                <Avatar shape="square" size="large" icon={<UserOutlined />} />
+                <Avatar shape="square" size="large" icon={<UserOutlined />} />
+              </Space>
+              <Space wrap size={20}>
+                <Avatar shape="square" size="large" icon={<UserOutlined />} />
+                <Avatar shape="square" size="large" icon={<UserOutlined />} />
+                <Avatar shape="square" size="large" icon={<UserOutlined />} />
+                <Avatar shape="square" size="large" icon={<UserOutlined />} />
+              </Space>
+            </Space>
           </Menu.SubMenu>
 
           <Menu.SubMenu title="Deniz">
@@ -202,7 +271,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({
           <Menu.Item>Radars</Menu.Item>
           <Menu.Item>H</Menu.Item>
         </Menu.SubMenu>
-        <Menu.Item className="clearSingleMarker">Clear Single Marker</Menu.Item>
+
         <Menu.Item className="clearMarkerBtn">
           <div onClick={clearMarkers} id="clearMarkers">
             {clearMarkerBtnState}

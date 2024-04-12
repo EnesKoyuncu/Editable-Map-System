@@ -14,6 +14,7 @@
   font-family: "Times New Roman", Times, serif;
   letter-spacing: 1px;
   font-weight: 500;
+  transition: width 0.8s ease-out; /*TODO buraya bakılcak */
 }
 
 .sideMenuDesign {
@@ -32,28 +33,6 @@
   visibility: hidden !important;
 }
 
-.containerSmallMode {
-  width: 50px;
-  height: 100%;
-  transition: width 0.5s;
-}
-
-.section {
-  background-color: rgba(128, 0, 128, 0.644);
-  padding: 8px;
-  display: flex;
-  justify-content: center;
-  column-gap: 8px;
-  flex-direction: column;
-}
-
-.iconSection {
-  min-height: 21px;
-  padding: 8px;
-  color: white;
-  overflow: auto;
-}
-
 .iconLand {
   display: flex;
   flex-direction: column;
@@ -63,34 +42,6 @@
 .iconFixer {
   position: relative;
   top: 2px;
-}
-
-.back {
-  position: relative;
-  top: 0;
-  left: 10px;
-  border-radius: 10%;
-  padding: 8px;
-  background-color: rgb(174, 175, 175);
-  margin-top: 5px;
-}
-
-.buttonSection {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-.hidedBack {
-  position: fixed;
-  right: 10px;
-  top: 10px;
-  border-radius: 10%;
-  padding: 8px;
-  background-color: rgb(125, 143, 160);
-  font-size: 1.1rem;
-  color: white;
-  z-index: 1001;
-  display: none;
 }
 
 .dropdown-content {
@@ -103,70 +54,32 @@
   min-height: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.25);
   padding: 6px 8px;
-  /* z-index: 1; */
-}
-
-.subIconMenus {
-  min-height: 80px;
-
-  display: flex none;
-  flex-direction: column;
-  position: relative;
-  row-gap: 8px;
-  justify-content: space-between;
-  bottom: -8px;
-  margin-bottom: 24px;
-  overflow-y: auto;
-}
-
-.subIconMenus::-webkit-scrollbar {
-  width: 0.7vw;
-}
-
-.subIconMenus::-webkit-scrollbar-thumb {
-  background: black;
-  border-radius: 10px;
-}
-.subIconMenus::-webkit-scrollbar-track {
-  background: rgb(163, 158, 158);
-  border-radius: 10px;
-}
-
-.subIconPool {
-  background-color: rgba(161, 138, 138, 0.7);
-  padding: 8px;
-  border-radius: 2px;
-  display: flex;
-  flex-direction: column;
-  row-gap: 8px;
 }
 
 .grid-container {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto auto auto;
   background-color: #8f959b;
   padding: 3px;
 }
-
-.active {
-  background-color: rgba(248, 248, 248, 0.3) !important ;
-}
-
 .grid-item {
   background-color: rgb(248, 248, 248);
-
   border: 1px solid rgba(0, 0, 0, 0.8);
   padding: 16px;
   font-size: 30px;
   text-align: center;
 }
 
-.cursorPointer:hover {
-  cursor: pointer;
+.active {
+  background-color: rgba(248, 248, 248, 0.3) !important ;
 }
 
 .hided {
   display: none;
+}
+
+.cursorPointer:hover {
+  cursor: pointer;
 }
 
 .options {
@@ -200,9 +113,5 @@
   position: absolute !important;
   display: flex;
   bottom: 0;
-  margin-bottom: 0;
   border: 1px solid rgba(0, 0, 0, 0.2);
-  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
-    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
-    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
 }

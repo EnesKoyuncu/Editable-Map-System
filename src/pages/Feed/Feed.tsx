@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import locationPng from "../../images/location.png";
-import emptyPng from "../../images/icons/Empty.png";
+import React, { useEffect, useState } from "react";
 import {
   MapContainer as LeafletMap,
   Marker,
@@ -23,7 +21,6 @@ import { FeatureGroup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { EditControl } from "react-leaflet-draw";
-import { v4 as uuidv4 } from "uuid";
 
 interface FeedProps {}
 
@@ -32,14 +29,36 @@ const Feed: React.FC<FeedProps> = () => {
     undefined
   );
 
-  const [markers, setMarkers] = useState<JSX.Element[]>([]);
+  const [markers, setMarkers] = useState<{ id: number; marker: JSX.Element }[]>(
+    []
+  );
+
+  const [clearSingleMarker, setClearSingleMarker] = useState<boolean>();
+
+  // const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  // // * Ekran Genişliği Ayarı
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setScreenWidth(window.innerWidth);
+  //   };
+
+  //   window.addEventListener("resize", handleResize);
+
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    console.log("Clear Single Marker: ", clearSingleMarker);
+  }, [clearSingleMarker]);
 
   const getPopupContent = (markerId: number, icon?: CustomIcon) => {
     const removeMarker = () => {
-      setMarkers((prev) =>
-        prev.filter((_, key) => _.key !== markerId.toString())
-      );
+      setMarkers((prev) => prev.filter((marker) => marker.id !== markerId));
     };
+
     return (
       <Flex vertical gap={"middle"}>
         {icon && (
@@ -68,18 +87,34 @@ const Feed: React.FC<FeedProps> = () => {
       return;
     }
     const markerId = generateUniqueNumber(1, 10000);
-    setMarkers([
-      ...markers,
+    const markerKey = `marker-${markerId}`;
+    const marker = (
       <Marker
         position={[event.latlng.lat, event.latlng.lng]}
         draggable={true}
-        key={markerId}
+        key={markerKey}
         icon={new Icon({ iconUrl: currentIcon?.path, iconSize: [40, 40] })}
+        bubblingMouseEvents={true}
+        eventHandlers={{
+          click: removeMarker(markerId),
+        }}
       >
         <Popup>{getPopupContent(markerId, currentIcon)}</Popup>
-      </Marker>,
-    ]);
+      </Marker>
+    );
+    setMarkers([...markers, { id: markerId, marker }]);
   };
+
+  const removeMarker = React.useCallback(
+    (markerId: number) => {
+      console.log("Clear Single Marker test -->: ", clearSingleMarker);
+      if (!clearSingleMarker) {
+        setMarkers((prev) => prev.filter((marker) => marker.id !== markerId));
+      }
+      return undefined;
+    },
+    [clearSingleMarker]
+  );
 
   // * Mouse Event Atamaları
   const ClickControl = () => {
@@ -119,14 +154,17 @@ const Feed: React.FC<FeedProps> = () => {
           doubleClickZoom={true} // ! Yukarıdaki Mouse Event'i ile çakışıyor
           scrollWheelZoom={true}
           dragging={true}
-          style={{ width: "100vw", height: "100vh" }} // ! Burada % mi yoksa vh-vw mi kullanılacak?
+          style={{ width: "100vw", height: "100vh" }}
+          keyboardPanDelta={240} // Arrow Key ile harita kaydırma hızı
         >
           <TileLayer
             attribution={currentTileLayerAttr}
             url={currentTileLayerUrl}
           />
           <ClickControl />
-          {markers}
+
+          {markers.map((item) => item.marker)}
+
           <FeatureGroup>
             <EditControl
               position="bottomleft"
@@ -149,6 +187,8 @@ const Feed: React.FC<FeedProps> = () => {
           setCurrentTileLayerUrl={setCurrentTileLayerUrl}
           setCurrentTileLayerAttr={setCurrentTileLayerAttr}
           currentIcon={currentIcon}
+          setClearSingleMarker={setClearSingleMarker}
+          // screenWidth={screenWidth}
         />
       </div>
     </>
