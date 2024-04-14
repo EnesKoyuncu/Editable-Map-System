@@ -14,7 +14,7 @@
   font-family: "Times New Roman", Times, serif;
   letter-spacing: 1px;
   font-weight: 500;
-  transition: width 0.8s ease-out; /*TODO buraya bakılcak */
+  transition: width 0.2s ease; /*TODO buraya bakılcak */
 }
 
 .sideMenuDesign {
@@ -59,7 +59,7 @@
 .grid-container {
   display: grid;
   grid-template-columns: auto auto auto auto;
-  background-color: #8f959b;
+  background-color: #8f959b27;
   padding: 3px;
 }
 .grid-item {
@@ -71,7 +71,7 @@
 }
 
 .active {
-  background-color: rgba(248, 248, 248, 0.3) !important ;
+  background-color: rgba(248, 248, 248, 0.048) !important ;
 }
 
 .hided {
@@ -88,20 +88,21 @@
   align-items: center;
   justify-content: center;
   margin-top: 20px;
-  padding: 10px;
-  column-gap: 3px;
+  padding: 8px;
+  column-gap: 14px;
   margin-bottom: 20px;
-  font-size: 0.7rem;
-  font-weight: 500;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: flex-direction 0.4s ease-out;
 }
 
 .optionsDesign {
   flex-direction: column !important;
   justify-content: space-evenly !important;
   padding: 0 !important;
-  row-gap: 10px;
+  row-gap: 14px;
   margin-top: 15px !important;
-  font-size: 0.65rem !important;
+  font-size: 0.7rem !important;
 }
 
 .fontAwesomeIcons {

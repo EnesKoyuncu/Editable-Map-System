@@ -14,8 +14,7 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Avatar, Space } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { Space } from "antd";
 
 interface SideMenuProps {
   setIcon: any;
@@ -48,12 +47,15 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   const [clearSingleMarkerMode, setClearSingleMarkerMode] =
     useState<boolean>(false);
 
-  // const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
   // const [screenAutoChange, setScreenAutoChange] = useState<boolean>(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
   // * SideMenu Mode Değişikliği
   const changeMode = (value: boolean) => {
     setMode(value ? "vertical" : "inline");
     setSideMenuDesign(value ? true : false);
+    setIsChecked(value);
   };
 
   // useEffect(() => {
@@ -79,6 +81,25 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   //     }
   //   }
   // }, [screenAutoChange]);
+
+  // * Ekran genişliğini dinle ve güncelle
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+      console.log("screenWidth: ", window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  });
+
+  // * Ekran genişliğine göre yan menü modunu değiştir
+  useEffect(() => {
+    changeMode(screenWidth <= 1025);
+  }, [screenWidth]);
 
   // * SideMenu Mode Değişikliği
   useEffect(() => {
@@ -188,63 +209,55 @@ export const SideMenu: React.FC<SideMenuProps> = ({
         expandIcon={mode == "vertical" ? <></> : undefined}
       >
         <div className={clsx("options", mode == "vertical" && "optionsDesign")}>
-          {/* <Switch
+          <Switch
             onChange={changeMode}
             style={{ width: "28px", height: "22px" }}
+            checked={isChecked}
           />{" "}
-          <div>Mode</div> */}
+          <div>Mode</div>
           <Switch onChange={changeTheme} /> <div>Style</div>
-          <Switch onChange={clearSingleMarkersMode} /> <div>Clear</div>
+          {/* <Switch onChange={clearSingleMarkersMode} /> <div>Clear</div> */}
         </div>
 
         <Menu.SubMenu title={iconSubMenuTitle}>
           <Menu.SubMenu title="Symbol">
-            <IconContainerComponent
-              categoryName={iconCategory.Symbol}
-              selectIcon={selectIcon}
-              currentIcon={currentIcon}
-            />
+            <Space direction="vertical" size={64}>
+              <IconContainerComponent
+                categoryName={iconCategory.Symbol}
+                selectIcon={selectIcon}
+                currentIcon={currentIcon}
+              />
+            </Space>
           </Menu.SubMenu>
 
           <Menu.SubMenu title="Hava">
-            <IconContainerComponent
-              categoryName={iconCategory.Hava}
-              selectIcon={selectIcon}
-              currentIcon={currentIcon}
-            />
+            <Space direction="vertical" size={64}>
+              <IconContainerComponent
+                categoryName={iconCategory.Hava}
+                selectIcon={selectIcon}
+                currentIcon={currentIcon}
+              />
+            </Space>
           </Menu.SubMenu>
 
           <Menu.SubMenu title="Kara">
-            <IconContainerComponent
-              categoryName={iconCategory.Kara}
-              selectIcon={selectIcon}
-              currentIcon={currentIcon}
-            />
-          </Menu.SubMenu>
-
-          <Menu.SubMenu title="Kara Aracı">
-            <Space direction="vertical" size={14}>
-              <Space wrap size={30} className="grid-container">
-                <Avatar shape="square" size="large" icon={<UserOutlined />} />
-                <Avatar shape="square" size="large" icon={<UserOutlined />} />
-                <Avatar shape="square" size="large" icon={<UserOutlined />} />
-                <Avatar shape="square" size="large" icon={<UserOutlined />} />
-              </Space>
-              <Space wrap size={20}>
-                <Avatar shape="square" size="large" icon={<UserOutlined />} />
-                <Avatar shape="square" size="large" icon={<UserOutlined />} />
-                <Avatar shape="square" size="large" icon={<UserOutlined />} />
-                <Avatar shape="square" size="large" icon={<UserOutlined />} />
-              </Space>
+            <Space direction="vertical" size={64}>
+              <IconContainerComponent
+                categoryName={iconCategory.Kara}
+                selectIcon={selectIcon}
+                currentIcon={currentIcon}
+              />
             </Space>
           </Menu.SubMenu>
 
           <Menu.SubMenu title="Deniz">
-            <IconContainerComponent
-              categoryName={iconCategory.Deniz}
-              selectIcon={selectIcon}
-              currentIcon={currentIcon}
-            />
+            <Space direction="vertical" size={64}>
+              <IconContainerComponent
+                categoryName={iconCategory.Deniz}
+                selectIcon={selectIcon}
+                currentIcon={currentIcon}
+              />
+            </Space>
           </Menu.SubMenu>
         </Menu.SubMenu>
         <Menu.SubMenu title={drawSubMenuTitle}>
@@ -254,18 +267,18 @@ export const SideMenu: React.FC<SideMenuProps> = ({
         <Menu.SubMenu title={mapsSubMenuTitle}>
           <Menu.SubMenu title="Maps">
             <Menu.Item>
-              <a onClick={() => changeMap("Default")}>Default</a>
+              <span onClick={() => changeMap("Default")}>Default</span>
             </Menu.Item>
             <Menu.Item>
-              <a onClick={() => changeMap("CadastreSatellite")}>
+              <span onClick={() => changeMap("CadastreSatellite")}>
                 Cadastre Satellite
-              </a>
+              </span>
             </Menu.Item>
             <Menu.Item>
-              <a onClick={() => changeMap("StadiaLight")}>Stadia Light</a>
+              <span onClick={() => changeMap("StadiaLight")}>Stadia Light</span>
             </Menu.Item>
             <Menu.Item>
-              <a onClick={() => changeMap("StadiaDark")}>Stadia Dark</a>
+              <span onClick={() => changeMap("StadiaDark")}>Stadia Dark</span>
             </Menu.Item>
           </Menu.SubMenu>
           <Menu.Item>Radars</Menu.Item>

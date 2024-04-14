@@ -8,6 +8,11 @@ import warningRed from "../images/icons/warning-red.png";
 import warningBlack from "../images/icons/warning-black.png";
 import skullAndBones from "../images/icons/skull-and-bones.png";
 import emptyIcon from "../images/icons/Empty.png";
+import attention from "../images/icons/attention.png";
+import bomb from "../images/icons/bomb.png";
+import danger from "../images/icons/danger.png";
+import noWeapons from "../images/icons/no-weapons.png";
+import ukraine from "../images/icons/ukraine.png";
 export interface CustomIcon {
   name: string;
   path: any;
@@ -70,6 +75,31 @@ const icons: CustomIcon[] = [
   {
     name: "empty",
     path: emptyIcon,
+    category: iconCategory.Symbol,
+  },
+  {
+    name: "attention",
+    path: attention,
+    category: iconCategory.Symbol,
+  },
+  {
+    name: "bomb",
+    path: bomb,
+    category: iconCategory.Symbol,
+  },
+  {
+    name: "danger",
+    path: danger,
+    category: iconCategory.Symbol,
+  },
+  {
+    name: "noWeapons",
+    path: noWeapons,
+    category: iconCategory.Symbol,
+  },
+  {
+    name: "ukraine",
+    path: ukraine,
     category: iconCategory.Symbol,
   },
 ];

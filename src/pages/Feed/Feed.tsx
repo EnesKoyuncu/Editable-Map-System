@@ -35,7 +35,7 @@ const Feed: React.FC<FeedProps> = () => {
 
   const [clearSingleMarker, setClearSingleMarker] = useState<boolean>();
 
-  // const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
   // // * Ekran Genişliği Ayarı
   // useEffect(() => {
@@ -105,6 +105,10 @@ const Feed: React.FC<FeedProps> = () => {
     setMarkers([...markers, { id: markerId, marker }]);
   };
 
+  useEffect(() => {
+    console.log("currentIcon: ", currentIcon);
+  }, [currentIcon]);
+
   const removeMarker = React.useCallback(
     (markerId: number) => {
       console.log("Clear Single Marker test -->: ", clearSingleMarker);
@@ -148,6 +152,8 @@ const Feed: React.FC<FeedProps> = () => {
       <div>
         <LeafletMap
           center={[41.015137, 28.97953]}
+          minZoom={4}
+          maxZoom={20}
           zoom={16}
           attributionControl={true}
           zoomControl={true}

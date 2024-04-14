@@ -1,19 +1,20 @@
+import { Space } from "antd";
 import icons from "../data/iconPool";
 import IconComponent from "./IconComponent";
 
-export interface IconContaienr {
+export interface IconContainerProps {
   categoryName: any;
   selectIcon: any;
   currentIcon: any;
 }
 
-export const IconContainerComponent: React.FC<IconContaienr> = ({
+export const IconContainerComponent: React.FC<IconContainerProps> = ({
   categoryName,
   selectIcon,
   currentIcon,
 }) => {
   return (
-    <div className="grid-container">
+    <Space wrap size={10} className="grid-container">
       {icons
         .filter((icon) => icon.category === categoryName)
         .map((icon) => (
@@ -23,6 +24,6 @@ export const IconContainerComponent: React.FC<IconContaienr> = ({
             highlight={currentIcon?.name === icon.name}
           />
         ))}
-    </div>
+    </Space>
   );
 };
