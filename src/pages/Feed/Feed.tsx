@@ -33,27 +33,6 @@ const Feed: React.FC<FeedProps> = () => {
     []
   );
 
-  const [clearSingleMarker, setClearSingleMarker] = useState<boolean>();
-
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-
-  // // * Ekran Genişliği Ayarı
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setScreenWidth(window.innerWidth);
-  //   };
-
-  //   window.addEventListener("resize", handleResize);
-
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, []);
-
-  useEffect(() => {
-    console.log("Clear Single Marker: ", clearSingleMarker);
-  }, [clearSingleMarker]);
-
   const getPopupContent = (markerId: number, icon?: CustomIcon) => {
     const removeMarker = () => {
       setMarkers((prev) => prev.filter((marker) => marker.id !== markerId));
@@ -95,9 +74,6 @@ const Feed: React.FC<FeedProps> = () => {
         key={markerKey}
         icon={new Icon({ iconUrl: currentIcon?.path, iconSize: [40, 40] })}
         bubblingMouseEvents={true}
-        eventHandlers={{
-          click: removeMarker(markerId),
-        }}
       >
         <Popup>{getPopupContent(markerId, currentIcon)}</Popup>
       </Marker>
@@ -108,17 +84,6 @@ const Feed: React.FC<FeedProps> = () => {
   useEffect(() => {
     console.log("currentIcon: ", currentIcon);
   }, [currentIcon]);
-
-  const removeMarker = React.useCallback(
-    (markerId: number) => {
-      console.log("Clear Single Marker test -->: ", clearSingleMarker);
-      if (!clearSingleMarker) {
-        setMarkers((prev) => prev.filter((marker) => marker.id !== markerId));
-      }
-      return undefined;
-    },
-    [clearSingleMarker]
-  );
 
   // * Mouse Event Atamaları
   const ClickControl = () => {
@@ -193,8 +158,6 @@ const Feed: React.FC<FeedProps> = () => {
           setCurrentTileLayerUrl={setCurrentTileLayerUrl}
           setCurrentTileLayerAttr={setCurrentTileLayerAttr}
           currentIcon={currentIcon}
-          setClearSingleMarker={setClearSingleMarker}
-          // screenWidth={screenWidth}
         />
       </div>
     </>

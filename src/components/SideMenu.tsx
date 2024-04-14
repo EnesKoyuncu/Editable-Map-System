@@ -3,7 +3,7 @@ import "../style/sideMenu.css";
 import { Menu, Switch } from "antd";
 import type { MenuTheme } from "antd/es/menu";
 import maps from "../data/mapPool";
-import { iconCategory } from "../data/iconPool";
+import { CustomIcon, iconCategory } from "../data/iconPool";
 import { IconContainerComponent } from "./IconContainerComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
@@ -14,16 +14,14 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { Space } from "antd";
-
+import { Space, Select } from "antd";
+import { Button, Modal } from "antd";
 interface SideMenuProps {
   setIcon: any;
   setMarkers: any;
   setCurrentTileLayerUrl: any;
   setCurrentTileLayerAttr: any;
   currentIcon: any;
-  setClearSingleMarker: any;
-  // screenWidth: number;
 }
 
 export const SideMenu: React.FC<SideMenuProps> = ({
@@ -32,8 +30,6 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   setCurrentTileLayerUrl,
   setCurrentTileLayerAttr,
   currentIcon,
-  setClearSingleMarker,
-  // screenWidth,
 }) => {
   const [mode, setMode] = useState<"vertical" | "inline">("inline");
   const [theme, setTheme] = useState<MenuTheme>("light");
@@ -44,49 +40,25 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   const [clearMarkerBtnState, setClearMarkerBtnState] =
     useState<any>("Clear All Markers");
 
-  const [clearSingleMarkerMode, setClearSingleMarkerMode] =
-    useState<boolean>(false);
-
   const [isChecked, setIsChecked] = useState<boolean>(false);
-  // const [screenAutoChange, setScreenAutoChange] = useState<boolean>(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
 
-  // * SideMenu Mode Değişikliği
+  const [inputCategoryValue, setInputCategoryValue] = useState<iconCategory>(
+    iconCategory.Symbol
+  );
+  const [inputNameValue, setInputNameValue] = useState<string>("");
+  const [inputPathValue, setInputPathValue] = useState<any>();
+
   const changeMode = (value: boolean) => {
     setMode(value ? "vertical" : "inline");
     setSideMenuDesign(value ? true : false);
     setIsChecked(value);
   };
 
-  // useEffect(() => {
-  //   if (screenWidth <= 1025) {
-  //     setScreenAutoChange(true);
-  //   } else {
-  //     setScreenAutoChange(false);
-  //   }
-  // }, [screenWidth]);
-
-  // useEffect(() => {
-  //   if (isChecked === false) {
-  //     if (screenAutoChange) {
-  //       console.log("küçük ekran");
-  //       setMode("vertical");
-  //       setSideMenuDesign(true);
-  //       setIsChecked(true);
-  //     } else {
-  //       console.log("büyük ekran");
-  //       setMode("inline");
-  //       setSideMenuDesign(false);
-  //       setIsChecked(false);
-  //     }
-  //   }
-  // }, [screenAutoChange]);
-
   // * Ekran genişliğini dinle ve güncelle
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
-      console.log("screenWidth: ", window.innerWidth);
     };
 
     window.addEventListener("resize", handleResize);
@@ -158,41 +130,45 @@ export const SideMenu: React.FC<SideMenuProps> = ({
     }
   }, [sideMenuDesign]);
 
-  // * Tema Değiştirme
   const changeTheme = (value: boolean) => {
     setTheme(value ? "dark" : "light");
   };
 
-  // * İkon Seçme
   function selectIcon(icon: any) {
-    if (clearSingleMarkerMode) {
-      alert("Please turn off clear single marker mode to add new markers.");
+    if (currentIcon === icon || icon.name === "empty") {
+      setIcon(undefined);
     } else {
-      if (currentIcon === icon || icon.name === "empty") {
-        setIcon(undefined);
-      } else {
-        setIcon(icon);
-      }
+      setIcon(icon);
     }
   }
 
-  // * Tek Markerı Temizleme
-  const clearSingleMarkersMode = () => {
-    setClearSingleMarkerMode(!clearSingleMarkerMode);
-    setClearSingleMarker(!clearSingleMarkerMode);
-  };
-
-  // * Markersı Temizleme
   function clearMarkers() {
     setMarkers([]);
   }
 
-  // * Map Değiştirme
   function changeMap(name: string) {
     let map = maps.find((m) => m.name === name);
     setCurrentTileLayerUrl(map?.url);
     setCurrentTileLayerAttr(map?.attribution);
   }
+
+  const [loading, setLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const showModal = () => {
+    setOpen(true);
+  };
+
+  const handleOk = () => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+      setOpen(false);
+    }, 3000);
+  };
+  const handleCancel = () => {
+    setOpen(false);
+  };
 
   return (
     <div className={clsx("container", mode == "vertical" && "sideMenuDesign")}>
@@ -216,7 +192,6 @@ export const SideMenu: React.FC<SideMenuProps> = ({
           />{" "}
           <div>Mode</div>
           <Switch onChange={changeTheme} /> <div>Style</div>
-          {/* <Switch onChange={clearSingleMarkersMode} /> <div>Clear</div> */}
         </div>
 
         <Menu.SubMenu title={iconSubMenuTitle}>
@@ -284,6 +259,77 @@ export const SideMenu: React.FC<SideMenuProps> = ({
           <Menu.Item>Radars</Menu.Item>
           <Menu.Item>H</Menu.Item>
         </Menu.SubMenu>
+
+        <Menu.Item className="addIconSection">
+          <div>
+            <Button type="primary" onClick={showModal} className="addIconBtn">
+              Add Icon
+            </Button>
+            <Modal
+              open={open}
+              title="Add Icon Page"
+              onOk={handleOk}
+              onCancel={handleCancel}
+              footer={[
+                <Button key="back" onClick={handleCancel}>
+                  Back to Map
+                </Button>,
+                <Button
+                  key="submit"
+                  type="primary"
+                  loading={loading}
+                  onClick={handleOk}
+                >
+                  Confirm
+                </Button>,
+                <Button
+                  key="link"
+                  href="https://fontawesome.com/"
+                  type="primary"
+                  loading={loading}
+                  onClick={handleOk}
+                >
+                  Find More Icon!
+                </Button>,
+              ]}
+            >
+              <div>
+                <label htmlFor="name">Name:</label>
+                <input
+                  type="text"
+                  id="name"
+                  value={inputNameValue}
+                  onChange={(e) => setInputNameValue(e.target.value)}
+                  required
+                />
+              </div>
+              <div>
+                <label htmlFor="category">Category:</label>
+                <Select
+                  defaultValue="lucy"
+                  style={{ width: 120 }}
+                  onChange={undefined} // TODO: Fonksiyon Yaz
+                  options={[
+                    { value: "Symbol", label: "Symbol" },
+                    { value: "Hava", label: "Hava" },
+                    { value: "Kara", label: "Kara" },
+                    { value: "Deniz", label: "Deniz" },
+                  ]}
+                />
+              </div>
+              <div>
+                <label htmlFor="iconUrl">Icon Url:</label>
+                <input
+                  type="text"
+                  id="iconUrl"
+                  value={inputPathValue}
+                  onChange={(e) => setInputPathValue(e.target.value)}
+                  required
+                />
+              </div>
+            </Modal>
+          </div>
+        </Menu.Item>
 
         <Menu.Item className="clearMarkerBtn">
           <div onClick={clearMarkers} id="clearMarkers">
