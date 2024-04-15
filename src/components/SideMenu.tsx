@@ -3,7 +3,7 @@ import "../style/sideMenu.css";
 import { Menu, Switch } from "antd";
 import type { MenuTheme } from "antd/es/menu";
 import maps from "../data/mapPool";
-import { CustomIcon, iconCategory } from "../data/iconPool";
+import { iconCategory, addIcon } from "../data/iconPool";
 import { IconContainerComponent } from "./IconContainerComponent";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import clsx from "clsx";
@@ -12,6 +12,7 @@ import {
   faPencil,
   faMap,
   faTrash,
+  faIcons,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Space, Select } from "antd";
@@ -39,6 +40,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   const [mapsSubMenuTitle, setMapsSubMenuTitle] = useState<any>("Maps");
   const [clearMarkerBtnState, setClearMarkerBtnState] =
     useState<any>("Clear All Markers");
+  const [addIconTitle, setAddIconTitle] = useState<any>("Add Icon");
 
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -92,6 +94,13 @@ export const SideMenu: React.FC<SideMenuProps> = ({
             style={{ width: "20px", height: "22px", marginBottom: "-4px" }}
           />
         );
+        setAddIconTitle(
+          <FontAwesomeIcon
+            icon={faIcons}
+            className="fontAwesomeIcons"
+            style={{ width: "20px", height: "22px", marginBottom: "-4px" }}
+          />
+        );
       } else {
         setIconSubMenuTitle(
           <FontAwesomeIcon
@@ -121,12 +130,20 @@ export const SideMenu: React.FC<SideMenuProps> = ({
             color="light"
           />
         );
+        setAddIconTitle(
+          <FontAwesomeIcon
+            icon={faIcons}
+            color="light"
+            className="fontAwesomeIcons"
+          />
+        );
       }
     } else {
       setIconSubMenuTitle("Icons");
       setDrawSubMenuTitle("Draw Options");
       setMapsSubMenuTitle("Maps");
       setClearMarkerBtnState("Clear All Markers");
+      setAddIconTitle("Add Icon");
     }
   }, [sideMenuDesign]);
 
@@ -158,16 +175,16 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   const showModal = () => {
     setOpen(true);
   };
-
+  const handleCancel = () => {
+    setOpen(false);
+  };
   const handleOk = () => {
     setLoading(true);
     setTimeout(() => {
+      addIcon(inputNameValue, inputPathValue, inputCategoryValue);
       setLoading(false);
       setOpen(false);
     }, 3000);
-  };
-  const handleCancel = () => {
-    setOpen(false);
   };
 
   return (
@@ -263,7 +280,7 @@ export const SideMenu: React.FC<SideMenuProps> = ({
         <Menu.Item className="addIconSection">
           <div>
             <Button type="primary" onClick={showModal} className="addIconBtn">
-              Add Icon
+              {addIconTitle}
             </Button>
             <Modal
               open={open}
@@ -292,21 +309,27 @@ export const SideMenu: React.FC<SideMenuProps> = ({
                   Find More Icon!
                 </Button>,
               ]}
+              className="addIconModal"
             >
               <div>
-                <label htmlFor="name">Name:</label>
+                <label htmlFor="name" id="lblName">
+                  Name:
+                </label>
                 <input
                   type="text"
                   id="name"
                   value={inputNameValue}
                   onChange={(e) => setInputNameValue(e.target.value)}
                   required
+                  className="input1"
                 />
               </div>
               <div>
-                <label htmlFor="category">Category:</label>
+                <label htmlFor="category" id="lblCategory">
+                  Category:
+                </label>
                 <Select
-                  defaultValue="lucy"
+                  defaultValue="Symbol"
                   style={{ width: 120 }}
                   onChange={undefined} // TODO: Fonksiyon Yaz
                   options={[
@@ -318,13 +341,16 @@ export const SideMenu: React.FC<SideMenuProps> = ({
                 />
               </div>
               <div>
-                <label htmlFor="iconUrl">Icon Url:</label>
+                <label htmlFor="iconUrl" id="lblUrl">
+                  Icon Url:
+                </label>
                 <input
                   type="text"
                   id="iconUrl"
                   value={inputPathValue}
                   onChange={(e) => setInputPathValue(e.target.value)}
                   required
+                  className="input1"
                 />
               </div>
             </Modal>

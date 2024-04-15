@@ -26,6 +26,10 @@ export enum iconCategory {
   Symbol,
 }
 
+export const addIcon = (name: string, path: any, category: iconCategory) => {
+  icons.push({ name, path, category });
+};
+
 const icons: CustomIcon[] = [
   {
     name: "jetFighter",
@@ -100,6 +104,11 @@ const icons: CustomIcon[] = [
   {
     name: "ukraine",
     path: ukraine,
+    category: iconCategory.Symbol,
+  },
+  {
+    name: "test",
+    path: "https://i.pinimg.com/236x/fb/75/45/fb75450280c68cad37eb35031c6443f0.jpg",
     category: iconCategory.Symbol,
   },
 ];

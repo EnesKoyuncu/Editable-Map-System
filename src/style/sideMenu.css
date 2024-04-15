@@ -61,17 +61,23 @@
   grid-template-columns: auto auto auto auto;
   background-color: #8f959b27;
   padding: 3px;
+  border-radius: 2px;
 }
 .grid-item {
   background-color: rgb(248, 248, 248);
-  border: 1px solid rgba(0, 0, 0, 0.8);
+  /* border: 1px solid rgba(0, 0, 0, 0.8); */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
   padding: 16px;
   font-size: 30px;
   text-align: center;
 }
+.grid-item:hover {
+  background-color: rgba(248, 248, 248, 0.048);
+}
 
 .active {
-  background-color: rgba(248, 248, 248, 0.048) !important ;
+  background-color: rgba(54, 53, 53, 0.459) !important ;
 }
 
 .hided {
@@ -114,11 +120,45 @@
   position: absolute !important;
   display: flex;
   bottom: 0;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  /* border: 1px solid rgba(0, 0, 0, 0.2); */
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset,
+    rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 }
 
 .addIconSection {
   width: 100%;
+}
+.ant-modal-content {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+.ant-modal-body {
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+.ant-modal-body > div {
+  display: flex;
+  flex-direction: row;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.input1 {
+  width: 200px;
+  height: 25px;
+  padding: 0 5px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+#lblName {
+  margin-right: 30px;
+}
+#lblCategory {
+  margin-right: 10px;
+}
+
+#lblUrl {
+  margin-right: 20px;
 }
 
 .addIconBtn {
@@ -132,4 +172,8 @@
 
 .ant-menu-item-only-child {
   padding: 0;
+}
+
+.ant-menu-item-selected {
+  color: default !important;
 }

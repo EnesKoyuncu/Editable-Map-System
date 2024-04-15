@@ -14,7 +14,7 @@ const IconComponent: React.FC<IconComponentProps> = ({
   return (
     <Avatar
       shape="square"
-      size={60}
+      size={64}
       icon={icon}
       onClick={() => {
         selectIcon(icon);
