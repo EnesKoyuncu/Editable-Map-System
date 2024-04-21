@@ -17,6 +17,13 @@ import {
 
 import { Space, Select } from "antd";
 import { Button, Modal } from "antd";
+
+import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { Flex, message, Upload } from "antd";
+// import type { GetProp, UploadProps } from "antd";
+
+import type { UploadProps } from "antd";
+
 interface SideMenuProps {
   setIcon: any;
   setMarkers: any;
@@ -51,6 +58,51 @@ export const SideMenu: React.FC<SideMenuProps> = ({
   const [inputNameValue, setInputNameValue] = useState<string>("");
   const [inputPathValue, setInputPathValue] = useState<any>();
 
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string>();
+
+  // type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
+  type FileType = Blob | File;
+
+  const getBase64 = (img: FileType, callback: (url: string) => void) => {
+    const reader = new FileReader();
+    reader.addEventListener("load", () => callback(reader.result as string));
+    reader.readAsDataURL(img);
+  };
+
+  const beforeUpload = (file: FileType) => {
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
+    if (!isJpgOrPng) {
+      message.error("You can only upload JPG/PNG file!");
+    }
+    const isLt2M = file.size / 1024 / 1024 < 2;
+    if (!isLt2M) {
+      message.error("Image must smaller than 2MB!");
+    }
+    return isJpgOrPng && isLt2M;
+  };
+
+  const handleChange: UploadProps["onChange"] = (info) => {
+    if (info.file.status === "uploading") {
+      console.log(info.file, info.fileList);
+      setBtnLoading(true);
+      return;
+    }
+    if (info.file.status === "done") {
+      // Get this url from response in real world.
+      getBase64(info.file.originFileObj as FileType, (url) => {
+        setBtnLoading(false);
+        setImageUrl(url);
+      });
+    }
+  };
+
+  const uploadButton = (
+    <button style={{ border: 0, background: "none" }} type="button">
+      {btnLoading ? <LoadingOutlined /> : <PlusOutlined />}
+      <div style={{ marginTop: 8 }}>Upload</div>
+    </button>
+  );
   const changeMode = (value: boolean) => {
     setMode(value ? "vertical" : "inline");
     setSideMenuDesign(value ? true : false);
@@ -274,94 +326,148 @@ export const SideMenu: React.FC<SideMenuProps> = ({
             </Menu.Item>
           </Menu.SubMenu>
           <Menu.Item>Radars</Menu.Item>
-          <Menu.Item>H</Menu.Item>
         </Menu.SubMenu>
 
-        <Menu.Item className="addIconSection">
-          <div>
-            <Button type="primary" onClick={showModal} className="addIconBtn">
-              {addIconTitle}
-            </Button>
-            <Modal
-              open={open}
-              title="Add Icon Page"
-              onOk={handleOk}
-              onCancel={handleCancel}
-              footer={[
-                <Button key="back" onClick={handleCancel}>
-                  Back to Map
-                </Button>,
-                <Button
-                  key="submit"
-                  type="primary"
-                  loading={loading}
-                  onClick={handleOk}
-                >
-                  Confirm
-                </Button>,
-                <Button
-                  key="link"
-                  href="https://fontawesome.com/"
-                  type="primary"
-                  loading={loading}
-                  onClick={handleOk}
-                >
-                  Find More Icon!
-                </Button>,
-              ]}
-              className="addIconModal"
-            >
-              <div>
-                <label htmlFor="name" id="lblName">
-                  Name:
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  value={inputNameValue}
-                  onChange={(e) => setInputNameValue(e.target.value)}
-                  required
-                  className="input1"
-                />
-              </div>
-              <div>
-                <label htmlFor="category" id="lblCategory">
-                  Category:
-                </label>
-                <Select
-                  defaultValue="Symbol"
-                  style={{ width: 120 }}
-                  onChange={undefined} // TODO: Fonksiyon Yaz
-                  options={[
-                    { value: "Symbol", label: "Symbol" },
-                    { value: "Hava", label: "Hava" },
-                    { value: "Kara", label: "Kara" },
-                    { value: "Deniz", label: "Deniz" },
-                  ]}
-                />
-              </div>
-              <div>
-                <label htmlFor="iconUrl" id="lblUrl">
-                  Icon Url:
-                </label>
-                <input
-                  type="text"
-                  id="iconUrl"
-                  value={inputPathValue}
-                  onChange={(e) => setInputPathValue(e.target.value)}
-                  required
-                  className="input1"
-                />
-              </div>
-            </Modal>
-          </div>
-        </Menu.Item>
+        <Menu
+          style={{
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Menu.Item className="addIconSection">
+            <div>
+              <Button type="primary" onClick={showModal} className="addIconBtn">
+                {addIconTitle}
+              </Button>
+              <Modal
+                open={open}
+                title="Add Icon Page"
+                onOk={handleOk}
+                onCancel={handleCancel}
+                footer={[
+                  <Button key="back" onClick={handleCancel}>
+                    Back to Map
+                  </Button>,
+                  <Button
+                    key="submit"
+                    type="primary"
+                    loading={loading}
+                    onClick={handleOk}
+                  >
+                    Confirm
+                  </Button>,
+                  <Button
+                    key="link"
+                    href="https://fontawesome.com/"
+                    type="primary"
+                    loading={loading}
+                    onClick={handleOk}
+                  >
+                    Find More Icon!
+                  </Button>,
+                ]}
+                className="addIconModal"
+              >
+                <div id="modalBodyContainer">
+                  <div className="modalBody1">
+                    <div>
+                      <label htmlFor="name" id="lblName">
+                        Name:
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        value={inputNameValue}
+                        onChange={(e) => setInputNameValue(e.target.value)}
+                        required
+                        className="input1"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="iconUrl" id="lblUrl">
+                        Icon Url:
+                      </label>
+                      <input
+                        type="text"
+                        id="iconUrl"
+                        value={inputPathValue}
+                        onChange={(e) => setInputPathValue(e.target.value)}
+                        required
+                        className="input1"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="category" id="lblCategory">
+                        Category:
+                      </label>
+                      <Select
+                        defaultValue="Symbol"
+                        style={{ width: 120 }}
+                        onChange={undefined} // TODO: Fonksiyon Yaz
+                        options={[
+                          { value: "Symbol", label: "Symbol" },
+                          { value: "Hava", label: "Hava" },
+                          { value: "Kara", label: "Kara" },
+                          { value: "Deniz", label: "Deniz" },
+                        ]}
+                      />
+                    </div>
+                  </div>
+                  <div className="modalBody2">
+                    <Flex gap="middle" wrap="wrap">
+                      <Upload
+                        name="avatar"
+                        listType="picture-card"
+                        className="avatar-uploader"
+                        showUploadList={false}
+                        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                        beforeUpload={beforeUpload}
+                        onChange={handleChange}
+                      >
+                        {imageUrl ? (
+                          <img
+                            src={imageUrl}
+                            alt="avatar"
+                            style={{ width: "100%" }}
+                          />
+                        ) : (
+                          uploadButton
+                        )}
+                      </Upload>
+                      <Upload
+                        name="avatar"
+                        listType="picture-circle"
+                        className="avatar-uploader"
+                        showUploadList={false}
+                        action="https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload"
+                        beforeUpload={beforeUpload}
+                        onChange={handleChange}
+                      >
+                        {imageUrl ? (
+                          <img
+                            src={imageUrl}
+                            alt="avatar"
+                            style={{ width: "100%" }}
+                          />
+                        ) : (
+                          uploadButton
+                        )}
+                      </Upload>
+                    </Flex>
+                  </div>
+                </div>
+              </Modal>
+            </div>
+          </Menu.Item>
 
-        <Menu.Item className="clearMarkerBtn">
-          <div onClick={clearMarkers} id="clearMarkers">
-            {clearMarkerBtnState}
-          </div>
-        </Menu.Item>
+          <Menu.Item className="clearMarkerBtn">
+            <div onClick={clearMarkers} id="clearMarkers">
+              {clearMarkerBtnState}
+            </div>
+          </Menu.Item>
+        </Menu>
       </Menu>
     </div>
   );
